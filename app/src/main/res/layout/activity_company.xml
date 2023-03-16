@@ -31,28 +31,28 @@
             android:orientation="horizontal">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip4"
+                android:id="@+id/companyWebsiteChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/website_chip" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip5"
+                android:id="@+id/companyPhoneChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="Phone" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip6"
+                android:id="@+id/companyOpeningHoursChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="Opening hours" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chip7"
+                android:id="@+id/companyAddressChip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Address" />
@@ -65,7 +65,7 @@
             android:isIndicator="true" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/companyDescriptionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -92,7 +92,7 @@
             android:text="@string/no_reviews_text" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/writeReviewButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/write_review_button" />
@@ -117,7 +117,7 @@
             android:text="@string/no_questions_text" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/askQuestionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ask_question_button" />
@@ -142,7 +142,7 @@
             android:text="@string/admin_access_description" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/requestAdminAccessButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/request_admin_access_button" />
