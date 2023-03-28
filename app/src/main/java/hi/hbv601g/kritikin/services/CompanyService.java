@@ -13,4 +13,5 @@ public interface CompanyService {
     public List<Company> findByName(String name);
     public void createReview(Review review);
     public void createQuestion(Question question);
+    public Company findById(Long id);
 }
