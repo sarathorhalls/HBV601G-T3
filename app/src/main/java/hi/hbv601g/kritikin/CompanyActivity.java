@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
 
+import hi.hbv601g.kritikin.entities.Company;
+import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
+import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 import hi.hbv601g.kritikin.services.implementation.NetworkManagerServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity {
@@ -21,11 +24,11 @@ public class CompanyActivity extends AppCompatActivity {
 
         // Get extras
         Bundle extras = getIntent().getExtras();
-        int companyId = extras.getInt("companyId");
+        long companyId = extras.getLong("companyId");
 
         // Get company info from API
-        // NetworkManagerService net = new NetworkManagerServiceImplementation();
-        // String companyJson = net.doGET("/company/1", null);
+        CompanyService companyService = new CompanyServiceImplementation();
+        Company company = companyService.findById(companyId);
 
         // Set content view
         setContentView(R.layout.activity_company);
@@ -46,8 +49,21 @@ public class CompanyActivity extends AppCompatActivity {
         Button requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
 
         // Set company info
-        companyNameText.setText("Company id: " + companyId);
-        reviewsView.setVisibility(View.VISIBLE);
-        noReviewsText.setVisibility(View.GONE);
+        companyNameText.setText(company.getName());
+        // TODO: add links to chips
+        companyRatingBar.setRating((float) company.getStarRating());
+        companyDescriptionText.setText(company.getDescription());
+
+        if (!company.getReviews().isEmpty()) {
+            // TODO: add reviews to reviewsView
+            reviewsView.setVisibility(View.VISIBLE);
+            noReviewsText.setVisibility(View.GONE);
+        }
+        if (!company.getQuestions().isEmpty()) {
+            // TODO: add questions to questionsView
+            // TODO: make questionsView visible
+            noQuestionsText.setVisibility(View.GONE);
+        }
+        // TODO: make buttons functional
     }
 }
