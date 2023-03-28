@@ -27,6 +27,7 @@ public class CompanyActivity extends AppCompatActivity {
         long companyId = extras.getLong("companyId");
 
         // Get company info from API
+        // TODO: put on worker thread
         CompanyService companyService = new CompanyServiceImplementation();
         Company company = companyService.findById(companyId);
 
