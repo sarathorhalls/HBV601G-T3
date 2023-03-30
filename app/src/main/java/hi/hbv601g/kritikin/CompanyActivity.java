@@ -84,9 +84,9 @@ public class CompanyActivity extends AppCompatActivity {
         companyDescriptionText.setText(company.getDescription());
 
         // Add links to chips
-        companyWebsiteChip.setOnClickListener((v) -> openURI(company.getWebsite()));
-        companyPhoneChip.setOnClickListener((v) -> openURI("tel:" + company.getPhoneNumber()));
-        companyAddressChip.setOnClickListener((v) -> openURI("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(company.getAddress())));
+        companyWebsiteChip.setOnClickListener(v -> openURI(company.getWebsite()));
+        companyPhoneChip.setOnClickListener(v -> openURI("tel:" + company.getPhoneNumber()));
+        companyAddressChip.setOnClickListener(v -> openURI("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(company.getAddress())));
 
         if (!company.getReviews().isEmpty()) {
             // TODO: add reviews to reviewsView
