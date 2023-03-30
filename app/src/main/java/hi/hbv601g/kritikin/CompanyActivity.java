@@ -35,15 +35,15 @@ public class CompanyActivity extends AppCompatActivity {
         TextView usernameText = new TextView(CompanyActivity.this);
         TextView contentText = new TextView(CompanyActivity.this);
 
-        // Set styles
+        // Set card styles
         int dp8 = dpToPx(8);
         int dp16 = dpToPx(16);
         card.setContentPadding(dp8, dp8, dp8, dp8);
         LinearLayout.LayoutParams cardLayoutParams = new LinearLayout.LayoutParams(dpToPx(120), LinearLayout.LayoutParams.WRAP_CONTENT);
         cardLayoutParams.setMargins(dp8, dp16, dp8, dp16);
         card.setLayoutParams(cardLayoutParams);
-        card.setMinimumHeight(dpToPx(60));
 
+        // Set text styles
         usernameText.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body2);
         contentText.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body1);
 
