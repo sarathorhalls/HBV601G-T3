@@ -39,13 +39,12 @@ public class CompanyActivity extends AppCompatActivity {
         // TODO: put network request on worker thread and fetch company from service
         // CompanyService companyService = new CompanyServiceImplementation();
         // Company company = companyService.findById(companyId);
-        // FIXME: phone number should not be an integer
         Company company = new Company(
                 companyId,
                 "Test Company",
                 4.5,
                 "https://example.org",
-                5555555,
+                5555555,  // FIXME: phone number should not be an integer
                 "This is a company description",
                 "Hagatorg 1",
                 "10:00–12:00",
