@@ -155,7 +155,7 @@ public class CompanyActivity extends AppCompatActivity {
         List<Review> reviewList = new ArrayList<>();
         reviewList.add(new Review(5L, company, new User("testuser"), 3.5, "Good company"));
         reviewList.add(new Review(6L, company, new User("testuser2"), 2.0, "Not my favorite company but they are okay"));
-        reviewList.add(new Review(6L, company, new User("testuser3"), 1.0, "Awful company. Will never go here again."));
+        reviewList.add(new Review(7L, company, new User("testuser3"), 1.0, "Awful company. Will never go here again."));
         company.setReviews(reviewList);
 
         List<Question> questionList = new ArrayList<>();
