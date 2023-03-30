@@ -6,6 +6,7 @@
     <string name="admin_heading">Administration</string>
     <string name="no_reviews_text">No reviews have been written about this company.</string>
     <string name="no_questions_text">This company has not received any questions.</string>
+    <string name="question_not_answered_text">This question has not been answered.</string>
     <string name="admin_access_description">If you are a representative of this company, you can apply for administrative access.</string>
     <string name="write_review_button">Write review</string>
     <string name="ask_question_button">Ask question</string>

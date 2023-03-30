@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: remove test code
         Intent companyIntent = new Intent(MainActivity.this, CompanyActivity.class);
-        companyIntent.putExtra("companyId", 1);
+        companyIntent.putExtra("companyId", 1L);
         startActivity(companyIntent);
     }
 }
