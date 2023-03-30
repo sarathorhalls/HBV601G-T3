@@ -6,7 +6,6 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.LayoutDirection;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -17,9 +16,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
-import com.google.android.material.resources.TextAppearance;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
