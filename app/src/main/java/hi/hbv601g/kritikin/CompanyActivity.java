@@ -27,6 +27,15 @@ import hi.hbv601g.kritikin.entities.User;
 
 public class CompanyActivity extends AppCompatActivity {
 
+    /**
+     * Creates a CardView displaying a review or question
+     * @param username Username of author
+     * @param text Review or question text
+     * @param starRating Rating given to company by reviewer
+     * @param answer Company answer to question
+     * @param isQuestion true if the card represents a question, false if it represents a review
+     * @return CardView displaying the provided information
+     */
     private CardView createCard(String username, String text, double starRating, String answer, boolean isQuestion) {
         // Create views
         CardView card = new CardView(CompanyActivity.this);
@@ -83,10 +92,20 @@ public class CompanyActivity extends AppCompatActivity {
         return card;
     }
 
+    /**
+     * Creates a CardView displaying a Review
+     * @param review Review to display
+     * @return CardView displaying the review
+     */
     private CardView createReviewCard(Review review) {
         return createCard(review.getUser().getUsername(), review.getReviewText(), review.getStarRating(), null, false);
     }
 
+    /**
+     * Creates a CardView displaying a Question
+     * @param question Question to display
+     * @return CardView displaying the question
+     */
     private CardView createQuestionCard(Question question) {
         return createCard(question.getUser().getUsername(), question.getQuestionString(), 0.0, question.getAnswerString(), true);
     }
@@ -100,6 +119,11 @@ public class CompanyActivity extends AppCompatActivity {
         startActivity(viewIntent);
     }
 
+    /**
+     * Converts dp (density-independent pixel) value to px
+     * @param dp Size in dp
+     * @return Size in px
+     */
     private int dpToPx(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
