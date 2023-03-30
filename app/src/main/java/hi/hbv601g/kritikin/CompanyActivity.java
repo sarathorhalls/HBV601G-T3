@@ -150,7 +150,7 @@ public class CompanyActivity extends AppCompatActivity {
                 "Hagatorg 1",
                 "10:00–12:00",
                 null,
-                new ArrayList<>()
+                null
         );
         List<Review> reviewList = new ArrayList<>();
         reviewList.add(new Review(5L, company, new User("testuser"), 3.5, "Good company"));
