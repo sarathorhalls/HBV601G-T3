@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // TODO: remove test code
-        Intent companyIntent = new Intent(MainActivity.this, CompanyActivity.class);
+        Intent companyIntent = new Intent(this, CompanyActivity.class);
         companyIntent.putExtra("companyId", 1L);
         startActivity(companyIntent);
     }

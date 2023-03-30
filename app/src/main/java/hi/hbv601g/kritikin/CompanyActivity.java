@@ -38,11 +38,11 @@ public class CompanyActivity extends AppCompatActivity {
      */
     private CardView createCard(String username, String text, double starRating, String answer, boolean isQuestion) {
         // Create views
-        CardView card = new CardView(CompanyActivity.this);
-        LinearLayout cardLayout = new LinearLayout(CompanyActivity.this);
+        CardView card = new CardView(this);
+        LinearLayout cardLayout = new LinearLayout(this);
         cardLayout.setOrientation(LinearLayout.VERTICAL);
-        TextView usernameText = new TextView(CompanyActivity.this);
-        TextView contentText = new TextView(CompanyActivity.this);
+        TextView usernameText = new TextView(this);
+        TextView contentText = new TextView(this);
 
         // Set card styles
         int dp8 = dpToPx(8);
@@ -66,7 +66,7 @@ public class CompanyActivity extends AppCompatActivity {
 
         if (isQuestion) {
             // Add answer text if question
-            TextView answerText = new TextView(CompanyActivity.this);
+            TextView answerText = new TextView(this);
             if (answer == null) {
                 // If no answer exists, display a message about that
                 answerText.setText(R.string.question_not_answered_text);
@@ -79,7 +79,7 @@ public class CompanyActivity extends AppCompatActivity {
             cardLayout.addView(answerText);
         } else {
             // Else add star rating below username
-            RatingBar ratingBar = new RatingBar(new ContextThemeWrapper(CompanyActivity.this, androidx.appcompat.R.style.Widget_AppCompat_RatingBar_Small), null, 0);
+            RatingBar ratingBar = new RatingBar(new ContextThemeWrapper(this, androidx.appcompat.R.style.Widget_AppCompat_RatingBar_Small), null, 0);
             LinearLayout.LayoutParams ratingBarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             ratingBar.setLayoutParams(ratingBarLayoutParams);
             ratingBar.setRating((float) starRating);
