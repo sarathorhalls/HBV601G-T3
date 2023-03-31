@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import okhttp3.Response;
 
 public interface NetworkManagerService {
-    public static final String SERVER_URL = "https://hbv501g-t18-production.up.railway.app/api/";
+    public static final String SERVER_URL = "https://hbv501g-t18-production.up.railway.app/api";
     public String doGET(String url) throws IOException;
     public Response doGETResponse(String url) throws IOException;
     public String doPOST(String url, LinkedHashMap<String, String> body) throws IOException;

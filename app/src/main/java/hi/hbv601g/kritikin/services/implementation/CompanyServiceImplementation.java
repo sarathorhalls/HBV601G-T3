@@ -36,7 +36,7 @@ public class CompanyServiceImplementation implements CompanyService {
     public List<Company> findAll() {
         String jsonCompany;
         try {
-            jsonCompany = networkManagerService.doGET("companies");
+            jsonCompany = networkManagerService.doGET("/companies");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
@@ -56,7 +56,7 @@ public class CompanyServiceImplementation implements CompanyService {
     public List<Company> findByName(String name) {
         String jsonCompany;
         try {
-            jsonCompany = networkManagerService.doGET("findCompany/" + name);
+            jsonCompany = networkManagerService.doGET("/findCompany/" + name);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
@@ -86,7 +86,7 @@ public class CompanyServiceImplementation implements CompanyService {
     public Company findById(Long id) {
         String jsonCompany;
         try {
-            jsonCompany = networkManagerService.doGET("company/" + id);
+            jsonCompany = networkManagerService.doGET("/company/" + id);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;

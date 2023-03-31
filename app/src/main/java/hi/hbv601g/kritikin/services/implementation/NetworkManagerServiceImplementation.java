@@ -31,7 +31,8 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
         Request request = new Request.Builder().url(SERVER_URL + url).build();
         Call call = client.newCall(request);
 
-        final Response[] returnedResponse = new Response[1];
+        return call.execute();
+        /*final Response[] returnedResponse = new Response[1];
 
         call.enqueue(new Callback() {
             @Override
@@ -44,7 +45,7 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
                 returnedResponse[0] = response;
             }
         });
-        return returnedResponse[0];
+        return returnedResponse[0];*/
     }
 
     @Override

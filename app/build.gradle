@@ -52,4 +52,7 @@ dependencies {
 
     //OKHttp Testing
     testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
+
+    //Guava for concurrency
+    implementation("com.google.guava:guava:31.1-android")
 }

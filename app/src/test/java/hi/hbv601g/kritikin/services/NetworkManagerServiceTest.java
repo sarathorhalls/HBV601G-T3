@@ -20,9 +20,9 @@ public class NetworkManagerServiceTest {
     }
     @Test
     public void getCompaniesFromServer() throws IOException {
-        try (Response companiesGetRequest = networkManagerService.doGETResponse("companies")) {
+        try (Response companiesGetRequest = networkManagerService.doGETResponse("/companies")) {
 
-            assertEquals("Companies response code not 200", companiesGetRequest.code(), 200);
+            assertEquals("Companies response code not 200", 200, companiesGetRequest.code());
             assertNotEquals("Companies Body null", null, companiesGetRequest.body());
             assertNotEquals("Companies body empty", "", companiesGetRequest.body().string());
         }
@@ -33,8 +33,8 @@ public class NetworkManagerServiceTest {
         LinkedHashMap<String, String> responseBody = new LinkedHashMap<>();
         responseBody.put("username", "test");
         responseBody.put("password", "test");
-        try (Response companiesPostRequest = networkManagerService.doPOSTResponse("auth/signin", responseBody)) {
-            assertEquals("Sign in response code not 200", companiesPostRequest.code(), 200);
+        try (Response companiesPostRequest = networkManagerService.doPOSTResponse("/auth/signin", responseBody)) {
+            assertEquals("Sign in response code not 200", 200, companiesPostRequest.code());
         }
     }
 }
