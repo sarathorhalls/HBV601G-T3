@@ -1,7 +1,6 @@
 package hi.hbv601g.kritikin.services.implementation;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import hi.hbv601g.kritikin.entities.Company;
@@ -37,7 +36,7 @@ public class CompanyServiceImplementation implements CompanyService {
     public List<Company> findAll() {
         String jsonCompany;
         try {
-            jsonCompany = networkManagerService.doGET("companies", new Object[0]);
+            jsonCompany = networkManagerService.doGET("companies");
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
@@ -57,7 +56,7 @@ public class CompanyServiceImplementation implements CompanyService {
     public List<Company> findByName(String name) {
         String jsonCompany;
         try {
-            jsonCompany = networkManagerService.doGET("findCompany/" + name, new Object[0]);
+            jsonCompany = networkManagerService.doGET("findCompany/" + name);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
@@ -87,7 +86,7 @@ public class CompanyServiceImplementation implements CompanyService {
     public Company findById(Long id) {
         String jsonCompany;
         try {
-            jsonCompany = networkManagerService.doGET("company/" + id, new Object[0]);
+            jsonCompany = networkManagerService.doGET("company/" + id);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
