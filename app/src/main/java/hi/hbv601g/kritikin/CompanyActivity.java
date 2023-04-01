@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -24,6 +25,8 @@ import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
 import hi.hbv601g.kritikin.entities.User;
+import hi.hbv601g.kritikin.services.CompanyService;
+import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity {
 
@@ -128,6 +131,8 @@ public class CompanyActivity extends AppCompatActivity {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
+    private Company company;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +145,7 @@ public class CompanyActivity extends AppCompatActivity {
         // TODO: put network request on worker thread and fetch company from service
         // CompanyService companyService = new CompanyServiceImplementation();
         // Company company = companyService.findById(companyId);
-        Company company = new Company(
+        company = new Company(
                 companyId,
                 "Test Company",
                 4.5,
