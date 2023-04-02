@@ -72,6 +72,38 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
+    public List<Review> findReviewsByCompanyId(Long id) {
+        String jsonReviews;
+        try {
+            jsonReviews = networkManagerService.doGET("/company/" + id + "/reviews");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        Gson g = new Gson();
+        Type listType = new TypeToken<List<Review>>(){}.getType();
+        List<Review> reviews = g.fromJson(jsonReviews, listType);
+        return reviews;
+    }
+
+    @Override
+    public List<Question> findQuestionsByCompanyId(Long id) {
+        String jsonQuestions;
+        try {
+            jsonQuestions = networkManagerService.doGET("/company/" + id + "/questions");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        Gson g = new Gson();
+        Type listType = new TypeToken<List<Question>>(){}.getType();
+        List<Question> questions = g.fromJson(jsonQuestions, listType);
+        return questions;
+    }
+
+    @Override
     public void createReview(Review review) {
         //TODO: implement createReview
     }
@@ -87,7 +119,7 @@ public class CompanyServiceImplementation implements CompanyService {
         try {
             jsonCompany = networkManagerService.doGET("/company/" + id);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
 
