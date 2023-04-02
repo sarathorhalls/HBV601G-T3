@@ -10,12 +10,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import hi.hbv601g.kritikin.entities.Company;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> {
 
-    private ArrayList<Company> localDataSet;
+    private List<Company> localDataSet;
     private static Context context;
 
     /**
@@ -30,13 +31,10 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             super(view);
             context = view.getContext();
             // Define click listener for the ViewHolder's View
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent companyIntent = new Intent(context, CompanyActivity.class);
-                    companyIntent.putExtra("companyId", companyId);
-                    context.startActivity(companyIntent);
-                }
+            view.setOnClickListener(v -> {
+                Intent companyIntent = new Intent(context, CompanyActivity.class);
+                companyIntent.putExtra("companyId", companyId);
+                context.startActivity(companyIntent);
             });
             textView = (TextView) view.findViewById(R.id.companyListItemNameText);
         }
@@ -56,7 +54,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
      * @param dataSet String[] containing the data to populate views to be used
      * by RecyclerView
      */
-    public CompanyAdapter(ArrayList<Company> dataSet) {
+    public CompanyAdapter(List<Company> dataSet) {
         localDataSet = dataSet;
     }
 
@@ -73,7 +71,6 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         Company company = localDataSet.get(position);
