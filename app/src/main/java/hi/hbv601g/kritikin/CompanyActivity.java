@@ -167,7 +167,7 @@ public class CompanyActivity extends AppCompatActivity {
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
         requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
 
-        // Connect reviews and questions
+        // Set empty adapters for recycler views to work
         reviewsRecycler.setAdapter(new ReviewAdapter(new ArrayList<>()));
         questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
 
