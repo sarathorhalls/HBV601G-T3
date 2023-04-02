@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import hi.hbv601g.kritikin.entities.Company;
+import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
@@ -41,6 +42,16 @@ public class CompanyServiceTest {
         assertNotEquals("list has no reviews", 0, listOfReviews.size());
         Review firstReview = listOfReviews.get(0);
         assertEquals("Review text wrong", "Test", firstReview.getReviewText());
-        assertEquals("First user wrong", "test", firstReview.getUsername());
+        assertEquals("Username wrong", "test", firstReview.getUsername());
+    }
+
+    @Test
+    public void JSONQuestionsFromQuestionsTest() {
+        List<Question> listOfQuestions = companyService.findQuestionsByCompanyId(1L);
+        assertNotNull("List null", listOfQuestions);
+        assertNotEquals("List has no questions", 0, listOfQuestions.size());
+        Question firstQuestion = listOfQuestions.get(0);
+        assertEquals("Question text wrong", "Test", firstQuestion.getQuestionText());
+        assertEquals("Username wrong", "test", firstQuestion.getUsername());
     }
 }

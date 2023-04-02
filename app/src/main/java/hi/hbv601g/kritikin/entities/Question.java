@@ -6,19 +6,21 @@ public class Question implements Serializable {
     private long id;
     private Company company;
     private User user;
-    private String questionString;
+    private String questionText;
     private String answerString;
+    private String username;
 
     public Question() {
 
     }
 
-    public Question(long id, Company company, User user, String questionString, String answerString) {
+    public Question(long id, Company company, User user, String questionText, String answerString, String username) {
         this.id = id;
         this.company = company;
         this.user = user;
-        this.questionString = questionString;
+        this.questionText = questionText;
         this.answerString = answerString;
+        this.username = username;
     }
 
     public long getId() {
@@ -45,12 +47,12 @@ public class Question implements Serializable {
         this.user = user;
     }
 
-    public String getQuestionString() {
-        return questionString;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setQuestionString(String questionString) {
-        this.questionString = questionString;
+    public void setQuestionString(String questionText) {
+        this.questionText = questionText;
     }
 
     public String getAnswerString() {
@@ -59,5 +61,13 @@ public class Question implements Serializable {
 
     public void setAnswerString(String answerString) {
         this.answerString = answerString;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

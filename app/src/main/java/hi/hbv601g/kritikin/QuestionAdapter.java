@@ -68,7 +68,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         // contents of the view with that element
         Question question = localDataSet.get(position);
         // viewHolder.getUsernameTextView().setText(question.getUser().getUsername());
-        viewHolder.getQuestionTextView().setText(question.getQuestionString());
+        viewHolder.getQuestionTextView().setText(question.getQuestionText());
         // Display answer if appropriate
         String answer = question.getAnswerString();
         if (answer != null) {
