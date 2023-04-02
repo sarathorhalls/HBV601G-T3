@@ -18,20 +18,20 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
      * Provides a reference to the type of views used to display each list item
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView usernameText;
+        // private final TextView usernameText;
         private final TextView questionText;
         private final TextView questionAnswerText;
 
         public ViewHolder(View view) {
             super(view);
-            usernameText = (TextView) view.findViewById(R.id.questionUsernameText);
+            // usernameText = (TextView) view.findViewById(R.id.questionUsernameText);
             questionText = (TextView) view.findViewById(R.id.questionText);
             questionAnswerText = (TextView) view.findViewById(R.id.questionAnswerText);
         }
 
-        public TextView getUsernameTextView() {
+        /* public TextView getUsernameTextView() {
             return usernameText;
-        }
+        } */
 
         public TextView getQuestionTextView() {
             return questionText;
@@ -67,7 +67,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         Question question = localDataSet.get(position);
-        viewHolder.getUsernameTextView().setText(question.getUser().getUsername());
+        // viewHolder.getUsernameTextView().setText(question.getUser().getUsername());
         viewHolder.getQuestionTextView().setText(question.getQuestionString());
         // Display answer if appropriate
         String answer = question.getAnswerString();
