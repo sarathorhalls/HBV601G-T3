@@ -8,17 +8,19 @@ public class Review implements Serializable {
     private User user;
     private double starRating;
     private String reviewText;
+    private String username;
 
     public Review() {
 
     }
 
-    public Review(long id, Company company, User user, double starRating, String reviewText) {
+    public Review(long id, Company company, User user, double starRating, String reviewText, String username) {
         this.id = id;
         this.company = company;
         this.user = user;
         this.starRating = starRating;
         this.reviewText = reviewText;
+        this.username = username;
     }
 
     public long getId() {
@@ -59,5 +61,13 @@ public class Review implements Serializable {
 
     public void setReviewText(String reviewText) {
         this.reviewText = reviewText;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -39,6 +39,8 @@ public class CompanyServiceTest {
         List<Review> listOfReviews = companyService.findReviewsByCompanyId(1L);
         assertNotNull("List null", listOfReviews);
         assertNotEquals("list has no reviews", 0, listOfReviews.size());
-        assertEquals("Review text wrong", "Test", listOfReviews.get(0).getReviewText());
+        Review firstReview = listOfReviews.get(0);
+        assertEquals("Review text wrong", "Test", firstReview.getReviewText());
+        assertEquals("First user wrong", "test", firstReview.getUsername());
     }
 }
