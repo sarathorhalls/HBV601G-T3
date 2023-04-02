@@ -8,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
@@ -23,6 +25,7 @@ import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity {
+    private CompanyService companyService;
     private Company company;
 
     private TextView companyNameText;
@@ -43,6 +46,10 @@ public class CompanyActivity extends AppCompatActivity {
     private Button writeReviewButton;
     private Button askQuestionButton;
     private Button requestAdminAccessButton;
+
+
+    private ScrollView companyScrollView;
+    private ProgressBar companyProgressBar;
 
 
     /**
@@ -107,9 +114,52 @@ public class CompanyActivity extends AppCompatActivity {
         }).start();
     }
 
+    /**
+     * Gets reviews and questions for company ID id from the web service,
+     * adds to the company instance variable and updates the UI
+     * @param id ID of company to get data for
+     */
+    private void getReviewsAndQuestions(long id) {
+        new Thread(() -> {
+            // Get reviews from service and store in instance variable
+            List<Review> reviews = companyService.findReviewsByCompanyId(id);
+            company.setReviews(reviews);
+
+            // Get Questions from service and store in instance variable
+            List<Question> questions = companyService.findQuestionsByCompanyId(id);
+            company.setQuestions(questions);
+
+            // When done
+            CompanyActivity.this.runOnUiThread(() -> {
+                // Update UI with new company
+                updateCompanyUI();
+                // Show company info
+                showCompanyInfo();
+            });
+        }).start();
+    }
+
+    /**
+     * Shows the company info UI and hides the progress bar
+     */
+    private void showCompanyInfo() {
+        companyProgressBar.setVisibility(View.GONE);
+        companyScrollView.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Hides the company UI and shows the progress bar
+     */
+    private void showProgressBar() {
+        companyScrollView.setVisibility(View.GONE);
+        companyProgressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        companyService = new CompanyServiceImplementation();
 
         // Get company from extras
         Bundle extras = getIntent().getExtras();
@@ -134,6 +184,9 @@ public class CompanyActivity extends AppCompatActivity {
         reviewsRecycler = (RecyclerView) findViewById(R.id.reviewsRecycler);
         questionsRecycler = (RecyclerView) findViewById(R.id.questionsRecycler);
 
+        companyScrollView = findViewById(R.id.companyScrollView);
+        companyProgressBar = findViewById(R.id.companyProgressBar);
+
         // TODO: implement dialogs
         writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
@@ -143,7 +196,11 @@ public class CompanyActivity extends AppCompatActivity {
         reviewsRecycler.setAdapter(new ReviewAdapter(new ArrayList<>()));
         questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
 
-        // Update company UI with correct info
-        updateCompanyUI();
+        // Get reviews and questions from API (to get usernames)
+        long companyId = company.getId();
+        getReviewsAndQuestions(companyId);
+
+        // Show progress bar while review and question info is being fetched
+        showProgressBar();
     }
 }
