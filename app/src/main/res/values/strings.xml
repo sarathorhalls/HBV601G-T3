@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Krítíkin</string>
     <string name="website_chip">Website</string>
+    <string name="opening_hours_heading">Opening hours</string>
     <string name="reviews_heading">Reviews</string>
     <string name="questions_heading">Questions</string>
     <string name="admin_heading">Administration</string>
