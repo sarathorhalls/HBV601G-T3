@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                searchResults.clear();
                 return false;
             }
         });
