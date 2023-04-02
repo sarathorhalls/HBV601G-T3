@@ -95,14 +95,14 @@
             <HorizontalScrollView
                 android:id="@+id/reviewsView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/reviewsContainer"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/reviewsRecycler"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </HorizontalScrollView>
 
             <TextView
@@ -133,14 +133,14 @@
             <HorizontalScrollView
                 android:id="@+id/questionsView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/questionsContainer"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/questionsRecycler"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
             </HorizontalScrollView>
 
             <TextView

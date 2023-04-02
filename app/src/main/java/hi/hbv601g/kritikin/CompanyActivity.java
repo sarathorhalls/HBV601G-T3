@@ -2,6 +2,7 @@ package hi.hbv601g.kritikin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -29,90 +30,6 @@ import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity {
-
-    /**
-     * Creates a CardView displaying a review or question
-     * @param username Username of author
-     * @param text Review or question text
-     * @param starRating Rating given to company by reviewer
-     * @param answer Company answer to question
-     * @param isQuestion true if the card represents a question, false if it represents a review
-     * @return CardView displaying the provided information
-     */
-    private CardView createCard(String username, String text, double starRating, String answer, boolean isQuestion) {
-        // Create views
-        CardView card = new CardView(this);
-        LinearLayout cardLayout = new LinearLayout(this);
-        cardLayout.setOrientation(LinearLayout.VERTICAL);
-        TextView usernameText = new TextView(this);
-        TextView contentText = new TextView(this);
-
-        // Set card styles
-        int dp8 = dpToPx(8);
-        int dp16 = dpToPx(16);
-        card.setContentPadding(dp8, dp8, dp8, dp8);
-        LinearLayout.LayoutParams cardLayoutParams = new LinearLayout.LayoutParams(dpToPx(120), LinearLayout.LayoutParams.WRAP_CONTENT);
-        cardLayoutParams.setMargins(dp8, dp16, dp8, dp16);
-        card.setLayoutParams(cardLayoutParams);
-
-        // Set text styles
-        usernameText.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body2);
-        contentText.setTextAppearance(androidx.appcompat.R.style.TextAppearance_AppCompat_Body1);
-
-        // Set text
-        usernameText.setText(username);
-        contentText.setText(text);
-
-        // Add children to card
-        cardLayout.addView(usernameText);
-        cardLayout.addView(contentText);
-
-        if (isQuestion) {
-            // Add answer text if question
-            TextView answerText = new TextView(this);
-            if (answer == null) {
-                // If no answer exists, display a message about that
-                answerText.setText(R.string.question_not_answered_text);
-                answerText.setTextAppearance(com.google.android.material.R.style.TextAppearance_AppCompat_Small);
-            } else {
-                // Otherwise, display the answer
-                answerText.setText(answer);
-                answerText.setTextAppearance(com.google.android.material.R.style.TextAppearance_AppCompat_Body2);
-            }
-            cardLayout.addView(answerText);
-        } else {
-            // Else add star rating below username
-            RatingBar ratingBar = new RatingBar(new ContextThemeWrapper(this, androidx.appcompat.R.style.Widget_AppCompat_RatingBar_Small), null, 0);
-            LinearLayout.LayoutParams ratingBarLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            ratingBar.setLayoutParams(ratingBarLayoutParams);
-            ratingBar.setRating((float) starRating);
-            cardLayout.addView(ratingBar, 1);
-        }
-
-        // Add card layout to card
-        card.addView(cardLayout);
-
-        return card;
-    }
-
-    /**
-     * Creates a CardView displaying a Review
-     * @param review Review to display
-     * @return CardView displaying the review
-     */
-    private CardView createReviewCard(Review review) {
-        return createCard(review.getUser().getUsername(), review.getReviewText(), review.getStarRating(), null, false);
-    }
-
-    /**
-     * Creates a CardView displaying a Question
-     * @param question Question to display
-     * @return CardView displaying the question
-     */
-    private CardView createQuestionCard(Question question) {
-        return createCard(question.getUser().getUsername(), question.getQuestionString(), 0.0, question.getAnswerString(), true);
-    }
-
     /**
      * Opens a URI in the appropriate application
      * @param uri URI of resource to be opened
@@ -120,15 +37,6 @@ public class CompanyActivity extends AppCompatActivity {
     private void openURI(String uri) {
         Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         startActivity(viewIntent);
-    }
-
-    /**
-     * Converts dp (density-independent pixel) value to px
-     * @param dp Size in dp
-     * @return Size in px
-     */
-    private int dpToPx(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private Company company;
@@ -184,10 +92,8 @@ public class CompanyActivity extends AppCompatActivity {
 
         RatingBar companyRatingBar = (RatingBar) findViewById(R.id.companyRatingBar);
 
-        ViewGroup reviewsView = findViewById(R.id.reviewsView);
-        ViewGroup reviewsContainer = findViewById(R.id.reviewsContainer);
-        ViewGroup questionsView = findViewById(R.id.questionsView);
-        ViewGroup questionsContainer = findViewById(R.id.questionsContainer);
+        RecyclerView reviewsRecycler = (RecyclerView) findViewById(R.id.reviewsRecycler);
+        RecyclerView questionsRecycler = (RecyclerView) findViewById(R.id.questionsRecycler);
 
         // TODO: implement dialogs
         Button writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
@@ -202,31 +108,27 @@ public class CompanyActivity extends AppCompatActivity {
         companyRatingBar.setRating((float) company.getStarRating());
         companyDescriptionText.setText(company.getDescription());
 
+        // Get reviews and questions
+        List<Review> reviews = company.getReviews();
+        List<Question> questions = company.getQuestions();
+
+        // Connect reviews and questions
+        reviewsRecycler.setAdapter(new ReviewAdapter(reviews));
+        questionsRecycler.setAdapter(new QuestionAdapter(questions));
+
+        // Hide no reviews text if reviews list is not empty
+        if (!reviews.isEmpty()) {
+            noReviewsText.setVisibility(View.GONE);
+        }
+
+        // Hide no questions text if questions list is not empty
+        if (!questions.isEmpty()) {
+            noQuestionsText.setVisibility(View.GONE);
+        }
+
         // Add links to chips
         companyWebsiteChip.setOnClickListener(v -> openURI(company.getWebsite()));
         companyPhoneChip.setOnClickListener(v -> openURI("tel:" + company.getPhoneNumber()));
         companyAddressChip.setOnClickListener(v -> openURI("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(company.getAddress())));
-
-        // Add reviews
-        if (!company.getReviews().isEmpty()) {
-            reviewsView.setVisibility(View.VISIBLE);
-            noReviewsText.setVisibility(View.GONE);
-            for (Review review : company.getReviews()) {
-                // Create review card and add to reviews container
-                CardView card = createReviewCard(review);
-                reviewsContainer.addView(card);
-            }
-        }
-
-        // Add questions
-        if (!company.getQuestions().isEmpty()) {
-            questionsView.setVisibility(View.VISIBLE);
-            noQuestionsText.setVisibility(View.GONE);
-            for (Question question : company.getQuestions()) {
-                // Create question card and add to questions container
-                CardView card = createQuestionCard(question);
-                questionsContainer.addView(card);
-            }
-        }
     }
 }
