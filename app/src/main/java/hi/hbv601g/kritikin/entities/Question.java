@@ -8,6 +8,7 @@ public class Question implements Serializable {
     private User user;
     private String questionString;
     private String answerString;
+    private String username;
 
     public Question() {
 
@@ -59,5 +60,13 @@ public class Question implements Serializable {
 
     public void setAnswerString(String answerString) {
         this.answerString = answerString;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
