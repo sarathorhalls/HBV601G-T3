@@ -1,14 +1,21 @@
 package hi.hbv601g.kritikin.services.implementation;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
-import hi.hbv601g.kritikin.services.helperClasses.jsonParser;
+//import hi.hbv601g.kritikin.services.helperClasses.jsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,14 +49,10 @@ public class CompanyServiceImplementation implements CompanyService {
             return null;
         }
 
-        try {
-            JSONArray jsonArray = new JSONArray(jsonCompany);
-            List<Company> companies = (List<Company>) jsonParser.toList(jsonArray);
-            return companies;
-        } catch (JSONException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        Gson g = new Gson();
+        Type listType = new TypeToken<List<Company>>(){}.getType();
+        List<Company> companies = g.fromJson(jsonCompany, listType);
+        return companies;
     }
 
     @Override
@@ -62,14 +65,10 @@ public class CompanyServiceImplementation implements CompanyService {
             return null;
         }
 
-        try {
-            JSONArray jsonArray = new JSONArray(jsonCompany);
-            List<Company> companies = (List<Company>) jsonParser.toList(jsonArray);
-            return companies;
-        } catch (JSONException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        Gson g = new Gson();
+        Type listType = new TypeToken<List<Company>>(){}.getType();
+        List<Company> companies = g.fromJson(jsonCompany, listType);
+        return companies;
     }
 
     @Override
@@ -92,13 +91,8 @@ public class CompanyServiceImplementation implements CompanyService {
             return null;
         }
 
-        try {
-            JSONObject jsonObject = new JSONObject(jsonCompany);
-            Company company = (Company) jsonParser.toMap(jsonObject);
-            return company;
-        } catch (JSONException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        Gson g = new Gson();
+        Company company = g.fromJson(jsonCompany, Company.class);
+        return company;
     }
 }

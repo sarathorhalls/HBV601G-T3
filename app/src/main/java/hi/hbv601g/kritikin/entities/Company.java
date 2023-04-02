@@ -1,6 +1,7 @@
 package hi.hbv601g.kritikin.entities;
 
 import java.util.List;
+import java.util.Map;
 
 public class Company {
     private long id;

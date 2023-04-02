@@ -49,10 +49,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation 'org.json:json:20080701'
 
     //OKHttp Testing
     testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
 
-    //Guava for concurrency
-    implementation("com.google.guava:guava:31.1-android")
+    //Gson
+    implementation 'com.google.code.gson:gson:2.7'
 }
