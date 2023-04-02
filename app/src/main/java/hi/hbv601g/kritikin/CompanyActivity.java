@@ -118,7 +118,7 @@ public class CompanyActivity extends AppCompatActivity {
      * Gets company with ID id from the web service and displays it in the UI
      * @param id ID of company to display
      */
-    private void getQuestionsAndReviews(long id) {
+    private void getReviewsAndQuestions(long id) {
         new Thread(() -> {
             // Get reviews from service and store in instance variable
             List<Review> reviews = companyService.findReviewsByCompanyId(id);
@@ -197,7 +197,7 @@ public class CompanyActivity extends AppCompatActivity {
 
         // Get reviews and questions from API (to get usernames)
         long companyId = company.getId();
-        getQuestionsAndReviews(companyId);
+        getReviewsAndQuestions(companyId);
 
         // Show progress bar while review and question info is being fetched
         showProgressBar();
