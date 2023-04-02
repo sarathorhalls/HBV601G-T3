@@ -3,15 +3,10 @@ package hi.hbv601g.kritikin;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import hi.hbv601g.kritikin.entities.Company;
 
