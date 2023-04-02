@@ -7,11 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
@@ -26,7 +23,6 @@ import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity {
-    private CompanyService companyService;
     private Company company;
 
     private TextView companyNameText;
@@ -48,8 +44,6 @@ public class CompanyActivity extends AppCompatActivity {
     private Button askQuestionButton;
     private Button requestAdminAccessButton;
 
-    private ScrollView companyScrollView;
-    private ProgressBar companyProgressBar;
 
     /**
      * Opens a URI in the appropriate application
@@ -97,37 +91,18 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     /**
-     * Shows the company info UI and hides the progress bar
-     */
-    private void showCompanyInfo() {
-        companyProgressBar.setVisibility(View.GONE);
-        companyScrollView.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Hides the company UI and shows the progress bar
-     */
-    private void showProgressBar() {
-        companyScrollView.setVisibility(View.GONE);
-        companyProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Gets company with ID id from the web service and displays info about it
+     * Gets company with ID id from the web service and displays it in the UI
      * @param id ID of company to display
      */
     private void getCompany(long id) {
+        CompanyService companyService = new CompanyServiceImplementation();
         new Thread(() -> {
             // Get company from service and store in instance variable
             company = companyService.findById(id);
             // Display company info
             if (company != null) {
-                CompanyActivity.this.runOnUiThread(() -> {
-                    // Update UI with new company
-                    updateCompanyUI();
-                    // Show company info
-                    showCompanyInfo();
-                });
+                // Update UI with new company
+                CompanyActivity.this.runOnUiThread(this::updateCompanyUI);
             }
         }).start();
     }
@@ -136,9 +111,9 @@ public class CompanyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get extras
+        // Get company from extras
         Bundle extras = getIntent().getExtras();
-        long companyId = extras.getLong("companyId");
+        company = (Company) extras.getSerializable("company");
 
         // Set content view
         setContentView(R.layout.activity_company);
@@ -159,9 +134,6 @@ public class CompanyActivity extends AppCompatActivity {
         reviewsRecycler = (RecyclerView) findViewById(R.id.reviewsRecycler);
         questionsRecycler = (RecyclerView) findViewById(R.id.questionsRecycler);
 
-        companyScrollView = findViewById(R.id.companyScrollView);
-        companyProgressBar = findViewById(R.id.companyProgressBar);
-
         // TODO: implement dialogs
         writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
@@ -171,11 +143,7 @@ public class CompanyActivity extends AppCompatActivity {
         reviewsRecycler.setAdapter(new ReviewAdapter(new ArrayList<>()));
         questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
 
-        // Get company info from API
-        companyService = new CompanyServiceImplementation();
-        getCompany(companyId);
-
-        // Show progress bar while company info is being fetched
-        showProgressBar();
+        // Update company UI with correct info
+        updateCompanyUI();
     }
 }

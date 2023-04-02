@@ -1,6 +1,8 @@
 package hi.hbv601g.kritikin.entities;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable {
     private long id;
     private Company company;
     private User user;
