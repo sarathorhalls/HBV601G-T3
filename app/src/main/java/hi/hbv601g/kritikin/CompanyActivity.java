@@ -115,8 +115,9 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets company with ID id from the web service and displays it in the UI
-     * @param id ID of company to display
+     * Gets reviews and questions for company ID id from the web service,
+     * adds to the company instance variable and updates the UI
+     * @param id ID of company to get data for
      */
     private void getReviewsAndQuestions(long id) {
         new Thread(() -> {
