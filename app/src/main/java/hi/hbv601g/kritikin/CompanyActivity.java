@@ -19,11 +19,32 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
-import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity {
+    private Company company;
+
+    private TextView companyNameText;
+    private TextView companyDescriptionText;
+    private TextView companyOpeningHoursText;
+    private TextView noReviewsText;
+    private TextView noQuestionsText;
+
+    private Chip companyWebsiteChip;
+    private Chip companyPhoneChip;
+    private Chip companyAddressChip;
+
+    private RatingBar companyRatingBar;
+
+    private RecyclerView reviewsRecycler;
+    private RecyclerView questionsRecycler;
+
+    private Button writeReviewButton;
+    private Button askQuestionButton;
+    private Button requestAdminAccessButton;
+
+
     /**
      * Opens a URI in the appropriate application
      * @param uri URI of resource to be opened
@@ -33,74 +54,17 @@ public class CompanyActivity extends AppCompatActivity {
         startActivity(viewIntent);
     }
 
-    private Company company;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Get extras
-        Bundle extras = getIntent().getExtras();
-        long companyId = extras.getLong("companyId");
-
-        // Get company info from API
-        // TODO: put network request on worker thread and fetch company from service
-        // CompanyService companyService = new CompanyServiceImplementation();
-        // Company company = companyService.findById(companyId);
-        company = new Company(
-                companyId,
-                "Test Company",
-                4.5,
-                "https://example.org",
-                5555555,  // FIXME: phone number should not be an integer
-                "This is a company description",
-                "Hagatorg 1",
-                "10:00–12:00",
-                null,
-                null
-        );
-        List<Review> reviewList = new ArrayList<>();
-        reviewList.add(new Review(5L, company, new User("testuser"), 3.5, "Good company"));
-        reviewList.add(new Review(6L, company, new User("testuser2"), 2.0, "Not my favorite company but they are okay"));
-        reviewList.add(new Review(7L, company, new User("testuser3"), 1.0, "Awful company. Will never go here again."));
-        company.setReviews(reviewList);
-
-        List<Question> questionList = new ArrayList<>();
-        questionList.add(new Question(5L, company, new User("testuser"), "What is 2+2?", null));
-        questionList.add(new Question(6L, company, new User("testuser2"), "What is 4+4?", "Four plus four is eight."));
-        company.setQuestions(questionList);
-
-        // Set content view
-        setContentView(R.layout.activity_company);
-
-        // Get components
-        TextView companyNameText = (TextView) findViewById(R.id.companyNameText);
-        TextView companyDescriptionText = (TextView) findViewById(R.id.companyDescriptionText);
-        TextView noReviewsText = (TextView) findViewById(R.id.noReviewsText);
-        TextView noQuestionsText = (TextView) findViewById(R.id.noQuestionsText);
-
-        Chip companyWebsiteChip = (Chip) findViewById(R.id.companyWebsiteChip);
-        Chip companyPhoneChip = (Chip) findViewById(R.id.companyPhoneChip);
-        Chip companyOpeningHoursChip = (Chip) findViewById(R.id.companyOpeningHoursChip);
-        Chip companyAddressChip = (Chip) findViewById(R.id.companyAddressChip);
-
-        RatingBar companyRatingBar = (RatingBar) findViewById(R.id.companyRatingBar);
-
-        RecyclerView reviewsRecycler = (RecyclerView) findViewById(R.id.reviewsRecycler);
-        RecyclerView questionsRecycler = (RecyclerView) findViewById(R.id.questionsRecycler);
-
-        // TODO: implement dialogs
-        Button writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
-        Button askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
-        Button requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
-
+    /**
+     * Updates the company UI according to the current value of the company instance variable
+     */
+    private void updateCompanyUI() {
         // Set company info
         companyNameText.setText(company.getName());
         companyPhoneChip.setText(Integer.toString(company.getPhoneNumber()));
-        companyOpeningHoursChip.setText(company.getOpeningHours());
         companyAddressChip.setText(company.getAddress());
         companyRatingBar.setRating((float) company.getStarRating());
         companyDescriptionText.setText(company.getDescription());
+        companyOpeningHoursText.setText(company.getOpeningHours());
 
         // Get reviews and questions
         List<Review> reviews = company.getReviews();
@@ -124,5 +88,62 @@ public class CompanyActivity extends AppCompatActivity {
         companyWebsiteChip.setOnClickListener(v -> openURI(company.getWebsite()));
         companyPhoneChip.setOnClickListener(v -> openURI("tel:" + company.getPhoneNumber()));
         companyAddressChip.setOnClickListener(v -> openURI("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(company.getAddress())));
+    }
+
+    /**
+     * Gets company with ID id from the web service and displays it in the UI
+     * @param id ID of company to display
+     */
+    private void getCompany(long id) {
+        CompanyService companyService = new CompanyServiceImplementation();
+        new Thread(() -> {
+            // Get company from service and store in instance variable
+            company = companyService.findById(id);
+            // Display company info
+            if (company != null) {
+                // Update UI with new company
+                CompanyActivity.this.runOnUiThread(this::updateCompanyUI);
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Get company from extras
+        Bundle extras = getIntent().getExtras();
+        company = (Company) extras.getSerializable("company");
+
+        // Set content view
+        setContentView(R.layout.activity_company);
+
+        // Get components
+        companyNameText = (TextView) findViewById(R.id.companyNameText);
+        companyDescriptionText = (TextView) findViewById(R.id.companyDescriptionText);
+        companyOpeningHoursText = (TextView) findViewById(R.id.companyOpeningHoursText);
+        noReviewsText = (TextView) findViewById(R.id.noReviewsText);
+        noQuestionsText = (TextView) findViewById(R.id.noQuestionsText);
+
+        companyWebsiteChip = (Chip) findViewById(R.id.companyWebsiteChip);
+        companyPhoneChip = (Chip) findViewById(R.id.companyPhoneChip);
+        companyAddressChip = (Chip) findViewById(R.id.companyAddressChip);
+
+        companyRatingBar = (RatingBar) findViewById(R.id.companyRatingBar);
+
+        reviewsRecycler = (RecyclerView) findViewById(R.id.reviewsRecycler);
+        questionsRecycler = (RecyclerView) findViewById(R.id.questionsRecycler);
+
+        // TODO: implement dialogs
+        writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
+        askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
+        requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
+
+        // Set empty adapters for recycler views to work
+        reviewsRecycler.setAdapter(new ReviewAdapter(new ArrayList<>()));
+        questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
+
+        // Update company UI with correct info
+        updateCompanyUI();
     }
 }

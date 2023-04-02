@@ -1,6 +1,8 @@
 package hi.hbv601g.kritikin.entities;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable {
     private long id;
     private Company company;
     private User user;

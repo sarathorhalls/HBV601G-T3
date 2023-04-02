@@ -22,15 +22,16 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
-        private long companyId;
+        private Company company;
 
         public ViewHolder(View view) {
             super(view);
             context = view.getContext();
             // Define click listener for the ViewHolder's View
             view.setOnClickListener(v -> {
+                // Start the company activity to display the selected company
                 Intent companyIntent = new Intent(context, CompanyActivity.class);
-                companyIntent.putExtra("companyId", companyId);
+                companyIntent.putExtra("company", company);
                 context.startActivity(companyIntent);
             });
             textView = (TextView) view.findViewById(R.id.companyListItemNameText);
@@ -40,8 +41,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             return textView;
         }
 
-        public void setCompanyId(long id) {
-            companyId = id;
+        public void setCompany(Company newCompany) {
+            company = newCompany;
         }
     }
 
@@ -71,7 +72,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         // contents of the view with that element
         Company company = localDataSet.get(position);
         viewHolder.getTextView().setText(company.getName());
-        viewHolder.setCompanyId(company.getId());
+        viewHolder.setCompany(company);
     }
 
     // Return the size of the dataset (invoked by the layout manager)

@@ -7,10 +7,9 @@
     tools:context=".CompanyActivity">
 
     <ScrollView
+        android:id="@+id/companyScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,11 +30,14 @@
                 android:text="Company Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
-            <LinearLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="horizontal">
+                app:alignContent="stretch"
+                app:alignItems="center"
+                app:flexWrap="wrap"
+                app:justifyContent="center">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/companyWebsiteChip"
@@ -52,19 +54,12 @@
                     android:text="Phone" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/companyOpeningHoursChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:clickable="false"
-                    android:text="Opening hours" />
-
-                <com.google.android.material.chip.Chip
                     android:id="@+id/companyAddressChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Address" />
-            </LinearLayout>
+
+            </com.google.android.flexbox.FlexboxLayout>
 
             <RatingBar
                 android:id="@+id/companyRatingBar"
@@ -79,6 +74,23 @@
                 android:gravity="center"
                 android:text="Company description"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/opening_hours_heading"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/companyOpeningHoursText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Opening hours"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <Space
                 android:layout_width="match_parent"
