@@ -12,12 +12,10 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Question;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
-
     private List<Question> localDataSet;
 
     /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
+     * Provides a reference to the type of views used to display each list item
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView usernameText;
@@ -45,10 +43,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     }
 
     /**
-     * Initialize the dataset of the Adapter
+     * Initialize the adapter
      *
-     * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView
+     * @param dataSet List containing the data to populate the views with
      */
     public QuestionAdapter(List<Question> dataSet) {
         localDataSet = dataSet;
@@ -81,7 +78,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return localDataSet.size();

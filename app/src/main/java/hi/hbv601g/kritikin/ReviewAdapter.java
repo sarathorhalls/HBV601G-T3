@@ -13,12 +13,10 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Review;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
-
     private List<Review> localDataSet;
 
     /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
+     * Provides a reference to the type of views used to display each list item
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView usernameText;
@@ -46,10 +44,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     /**
-     * Initialize the dataset of the Adapter
+     * Initialize the adapter
      *
-     * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView
+     * @param dataSet List containing the data to populate the views with
      */
     public ReviewAdapter(List<Review> dataSet) {
         localDataSet = dataSet;
@@ -77,7 +74,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return localDataSet.size();

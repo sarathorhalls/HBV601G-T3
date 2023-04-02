@@ -14,13 +14,11 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> {
-
     private List<Company> localDataSet;
     private static Context context;
 
     /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
+     * Provides a reference to the type of views used to display each list item
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -48,10 +46,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     }
 
     /**
-     * Initialize the dataset of the Adapter
+     * Initialize the adapter
      *
-     * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView
+     * @param dataSet List containing the data to populate the views with
      */
     public CompanyAdapter(List<Company> dataSet) {
         localDataSet = dataSet;
@@ -77,7 +74,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         viewHolder.setCompanyId(company.getId());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return localDataSet.size();
