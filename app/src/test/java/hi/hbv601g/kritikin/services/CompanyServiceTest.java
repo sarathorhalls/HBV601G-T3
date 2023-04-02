@@ -31,6 +31,7 @@ public class CompanyServiceTest {
         Company companyWithId1 = companyService.findById(1L);
         assertNotNull("Company null", companyWithId1);
         assertNotEquals("list empty", 0, companyWithId1.getReviews().size());
+        assertEquals("Review text wrong", "Test", companyWithId1.getReviews().get(0).getReviewText());
     }
 
     @Test
@@ -38,5 +39,6 @@ public class CompanyServiceTest {
         List<Review> listOfReviews = companyService.findReviewsByCompanyId(1L);
         assertNotNull("List null", listOfReviews);
         assertNotEquals("list has no reviews", 0, listOfReviews.size());
+        assertEquals("Review text wrong", "Test", listOfReviews.get(0).getReviewText());
     }
 }
