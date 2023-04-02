@@ -22,14 +22,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get search view and results list
         SearchView searchView = (SearchView) findViewById(R.id.searchView);
         RecyclerView searchResultRecycler = (RecyclerView) findViewById(R.id.searchResultRecycler);
+
+        // Set search results adapter
         ArrayList<Company> searchResults = new ArrayList<>();
         searchResultRecycler.setAdapter(new CompanyAdapter(searchResults));
 
+        // Handle search
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                // TODO: implement actual search
                 searchResults.add(new Company(
                         5L,
                         "Test Company",
@@ -62,13 +67,5 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        // System.out.println(query);
-
-        // TODO: remove test code
-        /*
-        Intent companyIntent = new Intent(this, CompanyActivity.class);
-        companyIntent.putExtra("companyId", 1L);
-        startActivity(companyIntent);
-        */
     }
 }
