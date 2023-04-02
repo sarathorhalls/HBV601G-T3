@@ -4,14 +4,14 @@ public class Review {
     private long id;
     private Company company;
     private User user;
-    private Double starRating;
+    private double starRating;
     private String reviewText;
 
     public Review() {
 
     }
 
-    public Review(long id, Company company, User user, Double starRating, String reviewText) {
+    public Review(long id, Company company, User user, double starRating, String reviewText) {
         this.id = id;
         this.company = company;
         this.user = user;
@@ -43,11 +43,11 @@ public class Review {
         this.user = user;
     }
 
-    public Double getStarRating() {
+    public double getStarRating() {
         return starRating;
     }
 
-    public void setStarRating(Double starRating) {
+    public void setStarRating(double starRating) {
         this.starRating = starRating;
     }
 
