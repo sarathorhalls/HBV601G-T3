@@ -5,6 +5,7 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
+import hi.hbv601g.kritikin.entities.User;
 
 public interface CompanyService {
     public Company createCompany(Company company);
@@ -13,7 +14,7 @@ public interface CompanyService {
     public List<Company> findByName(String name);
     public List<Review> findReviewsByCompanyId(Long id);
     public List<Question> findQuestionsByCompanyId(Long id);
-    public void createReview(Review review);
-    public void createQuestion(Question question);
+    public void createReview(Review review, long companyId, User loggedInUser);
+    public void createQuestion(Question question, long companyId, User loggedInUser);
     public Company findById(Long id);
 }

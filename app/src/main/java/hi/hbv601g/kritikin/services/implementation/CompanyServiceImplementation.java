@@ -5,11 +5,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
+import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
 
@@ -92,13 +94,40 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public void createReview(Review review) {
-        //TODO: implement createReview
+    public void createReview(Review review, long companyId, User loggedInUser) {
+        //Putting body into Key-Value pairs
+        LinkedHashMap<String, String> reviewBody = new LinkedHashMap<>();
+        reviewBody.put("starRating", Double.toString(review.getStarRating()));
+        reviewBody.put("reviewText", review.getReviewText());
+
+        //Putting header into Key-Value pair
+        LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
+        authHeader.put("Authorization", "Bearer " + loggedInUser.getAccess_token());
+
+        try {
+            //Send post request with review
+            networkManagerService.doPOST("/company/" + companyId + "/review", reviewBody, authHeader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void createQuestion(Question question) {
-        //TODO: implement createQuestion
+    public void createQuestion(Question question, long companyId, User loggedInUser) {
+        //Putting body into Key-Value pairs
+        LinkedHashMap<String, String> reviewBody = new LinkedHashMap<>();
+        reviewBody.put("reviewText", question.getQuestionText());
+
+        //Putting header into Key-Value pair
+        LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
+        authHeader.put("Authorization", "Bearer " + loggedInUser.getAccess_token());
+
+        try {
+            //Send post request with review
+            networkManagerService.doPOST("/company/" + companyId + "/question", reviewBody, authHeader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
