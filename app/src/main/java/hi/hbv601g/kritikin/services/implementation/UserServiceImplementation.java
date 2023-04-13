@@ -1,5 +1,7 @@
 package hi.hbv601g.kritikin.services.implementation;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
@@ -35,13 +37,16 @@ public class UserServiceImplementation implements UserService {
         LinkedHashMap<String, String> authBody = new LinkedHashMap<>();
         authBody.put("username", username);
         authBody.put("password", password);
+        User user = null;
         try {
             String loginBody = networkManagerService.doPOST("/auth/signin", authBody);
+            Gson g = new Gson();
+            user = g.fromJson(loginBody, User.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-        return null;
+        return user;
     }
 
     @Override
