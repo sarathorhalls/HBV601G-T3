@@ -16,9 +16,22 @@ public class UserServiceImplementation implements UserService {
         networkManagerService = new NetworkManagerServiceImplementation();
     }
     @Override
-    public User signUp(User user) {
-        //TODO: implement signUp
-        return null;
+    public User signUp(String username, String password) {
+        LinkedHashMap<String, String> authBody = new LinkedHashMap<>();
+        authBody.put("username", username);
+        authBody.put("password", password);
+
+        String jsonUser;
+
+        try {
+            jsonUser = networkManagerService.doPOST("/auth/signup", authBody);
+        } catch(IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Gson g = new Gson();
+        return g.fromJson(jsonUser, User.class);
     }
 
     @Override
