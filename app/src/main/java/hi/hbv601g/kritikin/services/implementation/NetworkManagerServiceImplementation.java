@@ -50,47 +50,39 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
 
     @Override
     public String doPOST(String url, LinkedHashMap<String, String> keyValuePairs) throws IOException {
-        return doPOSTResponse(url, keyValuePairs).body().string();
-    }
-
-    @Override
-    public Response doPOSTResponse(String url, LinkedHashMap<String, String> body) throws IOException {
-        FormBody.Builder formBuilder = new FormBody.Builder();
-
-        for (Map.Entry<String, String> keyValuePair: body.entrySet()) {
-            formBuilder.add(keyValuePair.getKey(), keyValuePair.getValue());
-        }
-
-        RequestBody formBody = formBuilder.build();
-
-        Request request = new Request.Builder().url(SERVER_URL + url).post(formBody).build();
-
-        Call call = client.newCall(request);
-        return call.execute();
+        return doPOSTResponse(url, keyValuePairs, null).body().string();
     }
 
     @Override
     public String doPOST(String url, LinkedHashMap<String, String> body, LinkedHashMap<String, String> headers) throws IOException {
         return doPOSTResponse(url, body, headers).body().string();
     }
-
     @Override
     public Response doPOSTResponse(String url, LinkedHashMap<String, String> body, LinkedHashMap<String, String> headers) throws IOException {
-        FormBody.Builder formBuilder = new FormBody.Builder();
-        Headers.Builder headerBuilder = new Headers.Builder();
+        Request.Builder requestBuilder = new Request.Builder().url(SERVER_URL + url);
+        if (body != null) {
+            FormBody.Builder formBuilder = new FormBody.Builder();
 
-        for (Map.Entry<String, String> keyValuePair: body.entrySet()) {
-            formBuilder.add(keyValuePair.getKey(), keyValuePair.getValue());
+            for (Map.Entry<String, String> keyValuePair: body.entrySet()) {
+                formBuilder.add(keyValuePair.getKey(), keyValuePair.getValue());
+            }
+
+            RequestBody formBody = formBuilder.build();
+            requestBuilder.post(formBody);
         }
 
-        for (Map.Entry<String, String> keyValuePair: headers.entrySet()) {
-            headerBuilder.add(keyValuePair.getKey(), keyValuePair.getValue());
+        if (headers != null) {
+            Headers.Builder headerBuilder = new Headers.Builder();
+
+            for (Map.Entry<String, String> keyValuePair: headers.entrySet()) {
+                headerBuilder.add(keyValuePair.getKey(), keyValuePair.getValue());
+            }
+
+            Headers formHeaders = headerBuilder.build();
+            requestBuilder.headers(formHeaders);
         }
 
-        RequestBody formBody = formBuilder.build();
-        Headers formHeaders = headerBuilder.build();
-
-        Request request = new Request.Builder().url(SERVER_URL + url).post(formBody).headers(formHeaders).build();
+        Request request = requestBuilder.build();
 
         Call call = client.newCall(request);
         return call.execute();

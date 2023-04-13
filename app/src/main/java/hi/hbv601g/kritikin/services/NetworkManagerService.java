@@ -9,8 +9,8 @@ public interface NetworkManagerService {
     public String doGET(String url) throws IOException;
     public Response doGETResponse(String url) throws IOException;
     public String doPOST(String url, LinkedHashMap<String, String> body) throws IOException;
-    public Response doPOSTResponse(String url, LinkedHashMap<String, String> body) throws IOException;
     public String doPOST(String url, LinkedHashMap<String, String> body, LinkedHashMap<String, String> headers) throws IOException;
+    //Just for testing
     public Response doPOSTResponse(String url, LinkedHashMap<String, String> body, LinkedHashMap<String, String> headers) throws IOException;
     public String doDELETE(String url, Object[] args) throws IOException;
     public String doPATCH(String url, Object[] args) throws IOException;
