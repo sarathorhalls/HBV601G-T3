@@ -23,6 +23,13 @@ public class Review implements Serializable {
         this.username = username;
     }
 
+    public Review(Company company, User user, double starRating, String reviewText) {
+        this.company = company;
+        this.user = user;
+        this.starRating = starRating;
+        this.reviewText = reviewText;
+    }
+
     public long getId() {
         return id;
     }

@@ -14,7 +14,7 @@ public interface CompanyService {
     public List<Company> findByName(String name);
     public List<Review> findReviewsByCompanyId(Long id);
     public List<Question> findQuestionsByCompanyId(Long id);
-    public void createReview(Review review, long companyId, User loggedInUser);
-    public void createQuestion(Question question, long companyId, User loggedInUser);
+    public void createReview(Review review);
+    public void createQuestion(Question question);
     public Company findById(Long id);
 }

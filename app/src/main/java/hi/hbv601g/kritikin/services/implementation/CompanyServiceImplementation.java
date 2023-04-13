@@ -14,6 +14,7 @@ import hi.hbv601g.kritikin.entities.Review;
 import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
+import okhttp3.Response;
 
 public class CompanyServiceImplementation implements CompanyService {
     NetworkManagerService networkManagerService;
@@ -94,7 +95,7 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     @Override
-    public void createReview(Review review, long companyId, User loggedInUser) {
+    public void createReview(Review review) {
         //Putting body into Key-Value pairs
         LinkedHashMap<String, String> reviewBody = new LinkedHashMap<>();
         reviewBody.put("starRating", Double.toString(review.getStarRating()));
@@ -102,29 +103,29 @@ public class CompanyServiceImplementation implements CompanyService {
 
         //Putting header into Key-Value pair
         LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
-        authHeader.put("Authorization", "Bearer " + loggedInUser.getAccess_token());
+        authHeader.put("Authorization", "Bearer " + review.getUser().getAccess_token());
 
         try {
             //Send post request with review
-            networkManagerService.doPOST("/company/" + companyId + "/review", reviewBody, authHeader);
+            Response response =  networkManagerService.doPOSTResponse("/company/" + review.getCompany().getId() + "/review", reviewBody, authHeader);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void createQuestion(Question question, long companyId, User loggedInUser) {
+    public void createQuestion(Question question) {
         //Putting body into Key-Value pairs
         LinkedHashMap<String, String> reviewBody = new LinkedHashMap<>();
-        reviewBody.put("reviewText", question.getQuestionText());
+        reviewBody.put("questionText", question.getQuestionText());
 
         //Putting header into Key-Value pair
         LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
-        authHeader.put("Authorization", "Bearer " + loggedInUser.getAccess_token());
+        authHeader.put("Authorization", "Bearer " + question.getUser().getAccess_token());
 
         try {
             //Send post request with review
-            networkManagerService.doPOST("/company/" + companyId + "/question", reviewBody, authHeader);
+            networkManagerService.doPOST("/company/" + question.getCompany().getId() + "/question", reviewBody, authHeader);
         } catch (IOException e) {
             e.printStackTrace();
         }
