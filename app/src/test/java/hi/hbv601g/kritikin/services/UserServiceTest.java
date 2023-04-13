@@ -17,6 +17,15 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testSignUpFunction() {
+        String username = "Sara53";
+        User testUser = userService.signUp(username, "password");
+
+        assertNotNull("user object null", testUser);
+        assertEquals("mismatched names", username, testUser.getUsername());
+    }
+
+    @Test
     public void testLoginFunction() {
         User testUser = userService.login("test", "test");
 
