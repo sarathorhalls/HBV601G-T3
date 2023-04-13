@@ -23,6 +23,12 @@ public class Question implements Serializable {
         this.username = username;
     }
 
+    public Question(Company company, User user, String questionText) {
+        this.company = company;
+        this.user = user;
+        this.questionText = questionText;
+    }
+
     public long getId() {
         return id;
     }

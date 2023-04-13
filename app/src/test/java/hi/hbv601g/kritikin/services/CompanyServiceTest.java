@@ -10,14 +10,18 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
+import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
+import hi.hbv601g.kritikin.services.implementation.UserServiceImplementation;
 
 public class CompanyServiceTest {
     CompanyService companyService;
+    User loggedInUser;
 
     @Before
-    public void createCompanyService() {
+    public void createCompanyServiceAndUser() {
         companyService = new CompanyServiceImplementation();
+        loggedInUser = (new UserServiceImplementation()).login("test", "test");
     }
 
     @Test
@@ -53,5 +57,22 @@ public class CompanyServiceTest {
         Question firstQuestion = listOfQuestions.get(0);
         assertEquals("Question text wrong", "Test", firstQuestion.getQuestionText());
         assertEquals("Username wrong", "test", firstQuestion.getUsername());
+    }
+
+    @Test
+    public void addReviewToCompanyId2Test() {
+        Company testCompany = new Company();
+        testCompany.setId(2L);
+        Review testReview = new Review(testCompany, loggedInUser, 3.5, "Test review from unit tests");
+        companyService.createReview(testReview);
+    }
+
+    @Test
+    public void addQuestionToCompanyId2Test() {
+        Company testCompany = new Company();
+        testCompany.setId(2L);
+        Question question = new Question(testCompany, loggedInUser, "Test Question from unit tests");
+        companyService.createQuestion(question);
+        
     }
 }
