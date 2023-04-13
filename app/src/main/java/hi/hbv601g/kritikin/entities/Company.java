@@ -2,7 +2,6 @@ package hi.hbv601g.kritikin.entities;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public class Company implements Serializable {
     private long id;

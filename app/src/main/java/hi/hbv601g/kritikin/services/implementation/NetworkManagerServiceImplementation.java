@@ -1,14 +1,11 @@
 package hi.hbv601g.kritikin.services.implementation;
 
-import androidx.annotation.NonNull;
-
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import hi.hbv601g.kritikin.services.NetworkManagerService;
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,20 +29,6 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
         Call call = client.newCall(request);
 
         return call.execute();
-        /*final Response[] returnedResponse = new Response[1];
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                //implement failure
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                returnedResponse[0] = response;
-            }
-        });
-        return returnedResponse[0];*/
     }
 
     @Override

@@ -37,7 +37,7 @@ public class UserServiceImplementation implements UserService {
         LinkedHashMap<String, String> authBody = new LinkedHashMap<>();
         authBody.put("username", username);
         authBody.put("password", password);
-        User user = null;
+        User user;
         try {
             String loginBody = networkManagerService.doPOST("/auth/signin", authBody);
             Gson g = new Gson();
