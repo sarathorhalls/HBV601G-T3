@@ -1,5 +1,8 @@
 package hi.hbv601g.kritikin.services.implementation;
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+
 import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
 import hi.hbv601g.kritikin.services.UserService;
@@ -29,7 +32,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User login(String username, String password) {
-        //TODO: implement login
+        LinkedHashMap<String, String> authBody = new LinkedHashMap<>();
+        authBody.put("username", username);
+        authBody.put("password", password);
+        try {
+            String loginBody = networkManagerService.doPOST("/auth/signin", authBody);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
         return null;
     }
 
