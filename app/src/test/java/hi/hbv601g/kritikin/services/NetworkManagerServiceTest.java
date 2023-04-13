@@ -33,7 +33,7 @@ public class NetworkManagerServiceTest {
         LinkedHashMap<String, String> responseBody = new LinkedHashMap<>();
         responseBody.put("username", "test");
         responseBody.put("password", "test");
-        try (Response companiesPostRequest = networkManagerService.doPOSTResponse("/auth/signin", responseBody)) {
+        try (Response companiesPostRequest = networkManagerService.doPOSTResponse("/auth/signin", responseBody, null)) {
             assertEquals("Sign in response code not 200", 200, companiesPostRequest.code());
         }
     }
