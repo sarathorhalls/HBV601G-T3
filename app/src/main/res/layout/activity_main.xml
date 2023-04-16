@@ -11,13 +11,26 @@
         android:id="@+id/showLoginActivityButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login_button_text" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/show_login_activity_button_text" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/logout_button_text"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/appLogo"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="64dp"
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/kritikin_logo" />

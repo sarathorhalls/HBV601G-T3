@@ -12,6 +12,7 @@ import hi.hbv601g.kritikin.services.UserService;
 import hi.hbv601g.kritikin.services.implementation.UserServiceImplementation;
 
 public class LoginActivity extends AppCompatActivity {
+    private Main app;
     private EditText usernameInput;
     private EditText passwordInput;
     private Button loginButton;
@@ -25,8 +26,11 @@ public class LoginActivity extends AppCompatActivity {
             if (loginResult == null || loginResult.getUsername() == null) {
                 runOnUiThread(this::showLoginFailedMessage);
             } else {
-                runOnUiThread(() -> showLoginSuccessMessage(loginResult.getUsername()));
-                // TODO: save login
+                app.setLoggedInUser(loginResult);
+                runOnUiThread(() -> {
+                    showLoginSuccessMessage(loginResult.getUsername());
+                    finish();
+                });
             }
         }).start();
     }
@@ -37,7 +41,11 @@ public class LoginActivity extends AppCompatActivity {
            if (loginResult == null || loginResult.getUsername() == null) {
                runOnUiThread(this::showSignupFailedMessage);
            } else {
-               runOnUiThread(() -> showLoginSuccessMessage(loginResult.getUsername()));
+               app.setLoggedInUser(loginResult);
+               runOnUiThread(() -> {
+                   showLoginSuccessMessage(loginResult.getUsername());
+                   finish();
+               });
            }
         }).start();
     }
@@ -72,6 +80,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Create user service instance
         userService = new UserServiceImplementation();
+
+        // Get the main class instance for saving login info
+        app = ((Main) getApplication());
 
         loginButton.setOnClickListener(v -> {
             login(usernameInput.getText().toString(), passwordInput.getText().toString());
