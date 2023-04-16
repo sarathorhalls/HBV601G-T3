@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import hi.hbv601g.kritikin.entities.User;
@@ -57,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
             // Log out
             app.setLoggedInUser(null);
             updateLoginState();
+            // Switch to blank self-destructing fragment to pause and resume current fragment
+            // (to update company page button state)
+            Fragment logoutFragment = new BlankFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerView, logoutFragment)
+                       .addToBackStack("logout")
+                       .commit();
             // Display toast message
             String message = String.format(getString(R.string.logged_out_text), username);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

@@ -1,7 +1,9 @@
 package hi.hbv601g.kritikin;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionInflater;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,6 +35,14 @@ public class MainFragment extends Fragment {
             // Display search results on UI thread
             getActivity().runOnUiThread(() -> searchResultRecycler.setAdapter(new CompanyAdapter(searchResults)));
         }).start();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setExitTransition(inflater.inflateTransition(R.transition.fade));
     }
 
     @Override

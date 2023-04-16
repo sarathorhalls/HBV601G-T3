@@ -1,6 +1,8 @@
 package hi.hbv601g.kritikin;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.transition.TransitionInflater;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -97,9 +99,20 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setEnterTransition(inflater.inflateTransition(R.transition.slide_left));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        // Get the main class instance for saving login info
+        app = (Main) getActivity().getApplication();
 
         // Get UI elements
         usernameInput = (EditText) view.findViewById(R.id.usernameInput);
@@ -109,9 +122,6 @@ public class LoginFragment extends Fragment {
 
         // Create user service instance
         userService = new UserServiceImplementation();
-
-        // Get the main class instance for saving login info
-        app = (Main) getActivity().getApplication();
 
         loginButton.setOnClickListener(v -> {
             login(usernameInput.getText().toString(), passwordInput.getText().toString());
