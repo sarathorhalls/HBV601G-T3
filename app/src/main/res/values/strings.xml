@@ -22,4 +22,8 @@
     <string name="login_failed_text">Error: Login failed</string>
     <string name="signup_failed_text">Error: Signup failed</string>
     <string name="login_success_text">Welcome %s!</string>
+    <string name="write_review_dialog_title">Write review</string>
+    <string name="review_text_hint">Review text</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="cancel_button_text">Cancel</string>
 </resources>

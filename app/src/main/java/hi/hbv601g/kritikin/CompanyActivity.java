@@ -1,6 +1,7 @@
 package hi.hbv601g.kritikin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
@@ -21,10 +23,13 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
+import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
-public class CompanyActivity extends AppCompatActivity {
+public class CompanyActivity extends AppCompatActivity
+                             implements WriteReviewDialogFragment.WriteReviewDialogListener {
+    private Main app;
     private CompanyService companyService;
     private Company company;
 
@@ -48,8 +53,8 @@ public class CompanyActivity extends AppCompatActivity {
     private Button requestAdminAccessButton;
 
 
-    private ScrollView companyScrollView;
-    private ProgressBar companyProgressBar;
+    private View companyScrollView;
+    private View companyProgressBar;
 
 
     /**
@@ -115,11 +120,15 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets reviews and questions for company ID id from the web service,
+     * Gets reviews and questions for company from the web service,
      * adds to the company instance variable and updates the UI
-     * @param id ID of company to get data for
      */
-    private void getReviewsAndQuestions(long id) {
+    private void getReviewsAndQuestions() {
+        long id = company.getId();
+
+        // Show progress bar while review and question info is being fetched
+        showProgressBar();
+
         new Thread(() -> {
             // Get reviews from service and store in instance variable
             List<Review> reviews = companyService.findReviewsByCompanyId(id);
@@ -155,6 +164,11 @@ public class CompanyActivity extends AppCompatActivity {
         companyProgressBar.setVisibility(View.VISIBLE);
     }
 
+    private void showWriteReviewDialog() {
+        DialogFragment writeReviewDialog = new WriteReviewDialogFragment();
+        writeReviewDialog.show(getSupportFragmentManager(), "review");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,8 +201,12 @@ public class CompanyActivity extends AppCompatActivity {
         companyScrollView = findViewById(R.id.companyScrollView);
         companyProgressBar = findViewById(R.id.companyProgressBar);
 
+        // Get the main class instance for getting login info
+        app = ((Main) getApplication());
+
         // TODO: implement dialogs
         writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
+        writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
         requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
 
@@ -197,10 +215,35 @@ public class CompanyActivity extends AppCompatActivity {
         questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
 
         // Get reviews and questions from API (to get usernames)
-        long companyId = company.getId();
-        getReviewsAndQuestions(companyId);
+        getReviewsAndQuestions();
+    }
 
-        // Show progress bar while review and question info is being fetched
-        showProgressBar();
+    /**
+     * Submits a new review to the current company
+     * @param dialogView View containing review rating and text inside dialog fragment
+     */
+    @Override
+    public void onWriteReviewDialogPositiveClick(View dialogView) {
+        // Get UI items
+        RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.writeReviewRatingBar);
+        EditText reviewText = (EditText) dialogView.findViewById(R.id.writeReviewTextInput);
+
+        Review review = new Review(
+                company,
+                app.getLoggedInUser(),
+                (double) ratingBar.getRating(),
+                reviewText.getText().toString()
+        );
+        new Thread(() -> {
+            // Create review via API
+            companyService.createReview(review);
+            // Set username for local display
+            review.setUsername(review.getUser().getUsername());
+            // Add new review to reviews list
+            List<Review> reviews = company.getReviews();
+            reviews.add(review);
+            // Update UI
+            runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
+        }).start();
     }
 }
