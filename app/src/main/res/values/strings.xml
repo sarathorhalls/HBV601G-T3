@@ -13,4 +13,19 @@
     <string name="ask_question_button">Ask question</string>
     <string name="request_admin_access_button">Request admin access</string>
     <string name="search_field_hint">Search…</string>
+    <string name="show_login_activity_button_text">Log in or sign up</string>
+    <string name="login_button_text">Log in</string>
+    <string name="logout_button_text">Log out</string>
+    <string name="signup_button_text">Sign up</string>
+    <string name="username_field_hint">Username</string>
+    <string name="password_field_hint">Password</string>
+    <string name="login_failed_text">Error: Login failed</string>
+    <string name="signup_failed_text">Error: Signup failed</string>
+    <string name="login_success_text">Welcome %s!</string>
+    <string name="write_review_dialog_title">Write review</string>
+    <string name="ask_question_dialog_title">Ask question</string>
+    <string name="review_text_hint">Review text</string>
+    <string name="question_text_hint">Question text</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="cancel_button_text">Cancel</string>
 </resources>

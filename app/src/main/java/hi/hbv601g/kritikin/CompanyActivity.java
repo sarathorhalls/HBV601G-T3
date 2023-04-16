@@ -1,6 +1,7 @@
 package hi.hbv601g.kritikin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -8,9 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
@@ -21,10 +21,14 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
+import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
-public class CompanyActivity extends AppCompatActivity {
+public class CompanyActivity extends AppCompatActivity
+                             implements WriteReviewDialogFragment.WriteReviewDialogListener,
+                                        AskQuestionDialogFragment.AskQuestionDialogListener {
+    private Main app;
     private CompanyService companyService;
     private Company company;
 
@@ -48,8 +52,8 @@ public class CompanyActivity extends AppCompatActivity {
     private Button requestAdminAccessButton;
 
 
-    private ScrollView companyScrollView;
-    private ProgressBar companyProgressBar;
+    private View companyScrollView;
+    private View companyProgressBar;
 
 
     /**
@@ -115,11 +119,15 @@ public class CompanyActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets reviews and questions for company ID id from the web service,
+     * Gets reviews and questions for company from the web service,
      * adds to the company instance variable and updates the UI
-     * @param id ID of company to get data for
      */
-    private void getReviewsAndQuestions(long id) {
+    private void getReviewsAndQuestions() {
+        long id = company.getId();
+
+        // Show progress bar while review and question info is being fetched
+        showProgressBar();
+
         new Thread(() -> {
             // Get reviews from service and store in instance variable
             List<Review> reviews = companyService.findReviewsByCompanyId(id);
@@ -155,6 +163,22 @@ public class CompanyActivity extends AppCompatActivity {
         companyProgressBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Displays the "write review" dialog fragment
+     */
+    private void showWriteReviewDialog() {
+        DialogFragment writeReviewDialog = new WriteReviewDialogFragment();
+        writeReviewDialog.show(getSupportFragmentManager(), "review");
+    }
+
+    /**
+     * Displays the "ask question" dialog fragment
+     */
+    private void showAskQuestionDialog() {
+        DialogFragment askQuestionDialog = new AskQuestionDialogFragment();
+        askQuestionDialog.show(getSupportFragmentManager(), "question");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,9 +211,25 @@ public class CompanyActivity extends AppCompatActivity {
         companyScrollView = findViewById(R.id.companyScrollView);
         companyProgressBar = findViewById(R.id.companyProgressBar);
 
-        // TODO: implement dialogs
+        // Get the main class instance for getting login info
+        app = ((Main) getApplication());
+
+        // Write review dialog
         writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
+        writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
+
+        // Ask question dialog
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
+        askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
+
+        // If user is logged in, activate write review and ask question buttons
+        if (app.getLoggedInUser() != null) {
+            writeReviewButton.setEnabled(true);
+            askQuestionButton.setEnabled(true);
+        }
+
+        // Request admin access button
+        // TODO: give this a function
         requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
 
         // Set empty adapters for recycler views to work
@@ -197,10 +237,64 @@ public class CompanyActivity extends AppCompatActivity {
         questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
 
         // Get reviews and questions from API (to get usernames)
-        long companyId = company.getId();
-        getReviewsAndQuestions(companyId);
+        getReviewsAndQuestions();
+    }
 
-        // Show progress bar while review and question info is being fetched
-        showProgressBar();
+    /**
+     * Submits a new review to the current company and updates the UI
+     * @param dialogView View containing review rating and text inside dialog fragment
+     */
+    @Override
+    public void onWriteReviewDialogPositiveClick(View dialogView) {
+        // Get UI items
+        RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.writeReviewRatingBar);
+        EditText reviewText = (EditText) dialogView.findViewById(R.id.writeReviewTextInput);
+
+        User user = app.getLoggedInUser();
+
+        Review review = new Review(
+                company,
+                user,
+                (double) ratingBar.getRating(),
+                reviewText.getText().toString()
+        );
+        new Thread(() -> {
+            // Create review via API
+            companyService.createReview(review);
+            // Set username for local display
+            review.setUsername(user.getUsername());
+            // Add new review to reviews list
+            List<Review> reviews = company.getReviews();
+            reviews.add(review);
+            // Update UI
+            runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
+        }).start();
+    }
+
+    /**
+     * Submits a new question to the current company and updates the UI
+     * @param dialogView View containing question text inside dialog fragment
+     */
+    @Override
+    public void onAskQuestionDialogPositiveClick(View dialogView) {
+        EditText questionText = (EditText) dialogView.findViewById(R.id.askQuestionTextInput);
+        User user = app.getLoggedInUser();
+
+        Question question = new Question(
+                company,
+                user,
+                questionText.getText().toString()
+        );
+        new Thread(() -> {
+            // Create question via API
+            companyService.createQuestion(question);
+            // Set username for local display
+            question.setUsername(user.getUsername());
+            // Add new question to questions list
+            List<Question> questions = company.getQuestions();
+            questions.add(question);
+            // Update UI
+            runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
+        }).start();
     }
 }
