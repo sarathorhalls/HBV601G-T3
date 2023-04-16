@@ -214,13 +214,22 @@ public class CompanyActivity extends AppCompatActivity
         // Get the main class instance for getting login info
         app = ((Main) getApplication());
 
-        // TODO: implement dialogs
+        // Write review dialog
         writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
         writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
 
+        // Ask question dialog
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
         askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
 
+        // If user is logged in, activate write review and ask question buttons
+        if (app.getLoggedInUser() != null) {
+            writeReviewButton.setEnabled(true);
+            askQuestionButton.setEnabled(true);
+        }
+
+        // Request admin access button
+        // TODO: give this a function
         requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
 
         // Set empty adapters for recycler views to work
