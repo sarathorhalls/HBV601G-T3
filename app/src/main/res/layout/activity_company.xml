@@ -128,26 +128,19 @@
                 android:text="@string/reviews_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-            <HorizontalScrollView
-                android:id="@+id/reviewsView"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewsRecycler"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/reviewsRecycler"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                </RelativeLayout>
-
-            </HorizontalScrollView>
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="always"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <TextView
                 android:id="@+id/noReviewsText"
@@ -180,26 +173,17 @@
                 android:text="@string/questions_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-            <HorizontalScrollView
-                android:id="@+id/questionsView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/questionsRecycler"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                </RelativeLayout>
-
-            </HorizontalScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/questionsRecycler"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:scrollbars="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <TextView
                 android:id="@+id/noQuestionsText"
