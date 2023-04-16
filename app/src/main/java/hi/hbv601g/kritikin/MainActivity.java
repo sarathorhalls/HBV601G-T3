@@ -1,62 +1,74 @@
 package hi.hbv601g.kritikin;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.User;
-import hi.hbv601g.kritikin.services.CompanyService;
-import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class MainActivity extends AppCompatActivity {
     private Main app;
-    private List<Company> searchResults;
-    private CompanyService companyService;
-    private SearchView searchView;
-    private RecyclerView searchResultRecycler;
-    private Button loginButton;
-    private Button logoutButton;
-
-    /**
-     * Searches for companies matching query from the web service and displays the results
-     * @param query Query to search for
-     */
-    private void searchForCompanies(String query) {
-        new Thread(() -> {
-            // Get company list from service and store in instance variable
-            searchResults = companyService.findByName(query);
-            // Display search results on UI thread
-            runOnUiThread(() -> searchResultRecycler.setAdapter(new CompanyAdapter(searchResults)));
-        }).start();
-    }
+    private Toolbar actionBar;
 
     /**
      * Updates the UI in accordance with the user's current login state
      */
-    private void updateLoginState() {
+    public void updateLoginState() {
+        // Get menu UI items
+        MenuItem loginAction = (MenuItem) actionBar.getMenu().findItem(R.id.loginAction);
+        MenuItem logoutAction = (MenuItem) actionBar.getMenu().findItem(R.id.logoutAction);
+
         User user = app.getLoggedInUser();
         if (user == null) {
-            loginButton.setVisibility(View.VISIBLE);
-            logoutButton.setVisibility(View.GONE);
+            // If not logged in, display log in action
+            loginAction.setVisible(true);
+            logoutAction.setVisible(false);
         } else {
-            loginButton.setVisibility(View.GONE);
-            logoutButton.setVisibility(View.VISIBLE);
+            // If logged in, set log out action title to include username
+            String logoutActionTitle = String.format(getString(R.string.logout_button_text), user.getUsername());
+            logoutAction.setTitle(logoutActionTitle);
+
+            // Display log out action
+            loginAction.setVisible(false);
+            logoutAction.setVisible(true);
         }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        updateLoginState();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.loginAction) {
+            Fragment loginFragment = new LoginFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerView, loginFragment)
+                    .addToBackStack("login")
+                    .commit();
+            return true;
+        } else if (id == R.id.logoutAction) {
+            // Save username
+            String username = app.getLoggedInUser().getUsername();
+            // Log out
+            app.setLoggedInUser(null);
+            updateLoginState();
+            // Display toast message
+            String message = String.format(getString(R.string.logged_out_text), username);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -64,46 +76,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Get search view and results list
-        searchView = (SearchView) findViewById(R.id.searchView);
-        searchResultRecycler = (RecyclerView) findViewById(R.id.searchResultRecycler);
-
-        // Set empty adapter for recycler view to work
-        searchResultRecycler.setAdapter(new CompanyAdapter(new ArrayList<>()));
-
-        // Handle search
-        companyService = new CompanyServiceImplementation();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                searchForCompanies(s);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                if (searchResults != null) {
-                    searchResults.clear();
-                }
-                return false;
-            }
-        });
+        // Set up action bar
+        actionBar = (Toolbar) findViewById(R.id.actionBar);
+        setSupportActionBar(actionBar);
 
         // Get the main class instance for getting login info
-        app = ((Main) getApplication());
-
-        // Activate login button
-        loginButton = (Button) findViewById(R.id.showLoginActivityButton);
-        loginButton.setOnClickListener(v -> {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-        });
-
-        // Activate logout button
-        logoutButton = (Button) findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> {
-            app.setLoggedInUser(null);
-            updateLoginState();
-        });
+        app = (Main) getApplication();
     }
 }
