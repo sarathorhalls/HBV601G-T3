@@ -3,7 +3,9 @@ package hi.hbv601g.kritikin;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private CompanyService companyService;
     private SearchView searchView;
     private RecyclerView searchResultRecycler;
+    private Button loginButton;
 
     /**
      * Searches for companies matching query from the web service and displays the results
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             // Get company list from service and store in instance variable
             searchResults = companyService.findByName(query);
             // Display search results on UI thread
-            MainActivity.this.runOnUiThread(() -> searchResultRecycler.setAdapter(new CompanyAdapter(searchResults)));
+            runOnUiThread(() -> searchResultRecycler.setAdapter(new CompanyAdapter(searchResults)));
         }).start();
     }
 
@@ -60,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return false;
             }
+        });
+
+        // Activate log in button
+        loginButton = (Button) findViewById(R.id.showLoginActivityButton);
+        loginButton.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
         });
     }
 }
