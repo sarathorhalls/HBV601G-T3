@@ -29,15 +29,15 @@
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:gravity="center"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/companyNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="48dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="Company Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
@@ -45,6 +45,8 @@
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 app:alignContent="stretch"
                 app:alignItems="center"
@@ -77,21 +79,27 @@
                 android:id="@+id/companyRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:isIndicator="true" />
 
             <TextView
                 android:id="@+id/companyDescriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="Company description"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/openingHoursHeading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/opening_hours_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -100,6 +108,8 @@
                 android:id="@+id/companyOpeningHoursText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="Opening hours"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
@@ -112,27 +122,39 @@
                 android:id="@+id/reviewsHeadingText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/reviews_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <HorizontalScrollView
                 android:id="@+id/reviewsView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/reviewsRecycler"
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/reviewsRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </RelativeLayout>
+
             </HorizontalScrollView>
 
             <TextView
                 android:id="@+id/noReviewsText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/no_reviews_text" />
 
@@ -140,6 +162,8 @@
                 android:id="@+id/writeReviewButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/write_review_button" />
 
             <Space
@@ -150,6 +174,8 @@
                 android:id="@+id/questionsHeadingText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/questions_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -159,18 +185,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/questionsRecycler"
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/questionsRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </RelativeLayout>
+
             </HorizontalScrollView>
 
             <TextView
                 android:id="@+id/noQuestionsText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/no_questions_text" />
 
@@ -178,6 +214,8 @@
                 android:id="@+id/askQuestionButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/ask_question_button" />
 
             <Space
@@ -188,6 +226,8 @@
                 android:id="@+id/adminHeadingText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/admin_heading"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -196,6 +236,8 @@
                 android:id="@+id/adminDescriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/admin_access_description" />
 
@@ -203,6 +245,8 @@
                 android:id="@+id/requestAdminAccessButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="48dp"
                 android:text="@string/request_admin_access_button" />
 
