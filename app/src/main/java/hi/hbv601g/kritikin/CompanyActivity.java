@@ -10,9 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.chip.Chip;
@@ -28,7 +26,8 @@ import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
 public class CompanyActivity extends AppCompatActivity
-                             implements WriteReviewDialogFragment.WriteReviewDialogListener {
+                             implements WriteReviewDialogFragment.WriteReviewDialogListener,
+                                        AskQuestionDialogFragment.AskQuestionDialogListener {
     private Main app;
     private CompanyService companyService;
     private Company company;
@@ -164,9 +163,20 @@ public class CompanyActivity extends AppCompatActivity
         companyProgressBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Displays the "write review" dialog fragment
+     */
     private void showWriteReviewDialog() {
         DialogFragment writeReviewDialog = new WriteReviewDialogFragment();
         writeReviewDialog.show(getSupportFragmentManager(), "review");
+    }
+
+    /**
+     * Displays the "ask question" dialog fragment
+     */
+    private void showAskQuestionDialog() {
+        DialogFragment askQuestionDialog = new AskQuestionDialogFragment();
+        askQuestionDialog.show(getSupportFragmentManager(), "question");
     }
 
     @Override
@@ -207,7 +217,10 @@ public class CompanyActivity extends AppCompatActivity
         // TODO: implement dialogs
         writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
         writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
+
         askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
+        askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
+
         requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
 
         // Set empty adapters for recycler views to work
@@ -219,7 +232,7 @@ public class CompanyActivity extends AppCompatActivity
     }
 
     /**
-     * Submits a new review to the current company
+     * Submits a new review to the current company and updates the UI
      * @param dialogView View containing review rating and text inside dialog fragment
      */
     @Override
@@ -228,9 +241,11 @@ public class CompanyActivity extends AppCompatActivity
         RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.writeReviewRatingBar);
         EditText reviewText = (EditText) dialogView.findViewById(R.id.writeReviewTextInput);
 
+        User user = app.getLoggedInUser();
+
         Review review = new Review(
                 company,
-                app.getLoggedInUser(),
+                user,
                 (double) ratingBar.getRating(),
                 reviewText.getText().toString()
         );
@@ -238,12 +253,39 @@ public class CompanyActivity extends AppCompatActivity
             // Create review via API
             companyService.createReview(review);
             // Set username for local display
-            review.setUsername(review.getUser().getUsername());
+            review.setUsername(user.getUsername());
             // Add new review to reviews list
             List<Review> reviews = company.getReviews();
             reviews.add(review);
             // Update UI
             runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
+        }).start();
+    }
+
+    /**
+     * Submits a new question to the current company and updates the UI
+     * @param dialogView View containing question text inside dialog fragment
+     */
+    @Override
+    public void onAskQuestionDialogPositiveClick(View dialogView) {
+        EditText questionText = (EditText) dialogView.findViewById(R.id.askQuestionTextInput);
+        User user = app.getLoggedInUser();
+
+        Question question = new Question(
+                company,
+                user,
+                questionText.getText().toString()
+        );
+        new Thread(() -> {
+            // Create question via API
+            companyService.createQuestion(question);
+            // Set username for local display
+            question.setUsername(user.getUsername());
+            // Add new question to questions list
+            List<Question> questions = company.getQuestions();
+            questions.add(question);
+            // Update UI
+            runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
         }).start();
     }
 }
