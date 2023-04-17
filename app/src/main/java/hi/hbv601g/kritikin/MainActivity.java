@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
+
+        // Update the login state in the menu before showing it
+        updateLoginState();
+
         return super.onCreateOptionsMenu(menu);
     }
 
