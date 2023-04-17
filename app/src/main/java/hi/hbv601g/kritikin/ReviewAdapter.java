@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Review;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
-    private List<Review> localDataSet;
+    private final List<Review> localDataSet;
 
     /**
      * Provides a reference to the type of views used to display each list item
@@ -25,9 +26,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         public ViewHolder(View view) {
             super(view);
-            usernameText = (TextView) view.findViewById(R.id.questionUsernameText);
-            reviewRatingBar = (RatingBar) view.findViewById(R.id.reviewRatingBar);
-            reviewText = (TextView) view.findViewById(R.id.questionText);
+            usernameText = view.findViewById(R.id.questionUsernameText);
+            reviewRatingBar = view.findViewById(R.id.reviewRatingBar);
+            reviewText = view.findViewById(R.id.questionText);
         }
 
         public TextView getUsernameTextView() {
@@ -53,6 +54,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,13 +17,13 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHolder> {
-    private List<Company> localDataSet;
-    private static Context context;
+    private final List<Company> localDataSet;
+    private Context context;
 
     /**
      * Provides a reference to the type of views used to display each list item
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
         private Company company;
 
@@ -37,7 +38,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
                            .addToBackStack("company")
                            .commit();
             });
-            textView = (TextView) view.findViewById(R.id.companyListItemNameText);
+            textView = view.findViewById(R.id.companyListItemNameText);
         }
 
         public TextView getTextView() {
@@ -59,6 +60,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item

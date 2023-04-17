@@ -6,9 +6,7 @@ public class User implements Serializable {
     private String access_token;
     private String username;
 
-    public User() {
-
-    }
+    public User() {}
 
     public User(String username) {
         this.username = username;
@@ -27,11 +25,11 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getAccess_token() {
+    public String getAccessToken() {
         return access_token;
     }
 
-    public void setAccess_token(String access_token) {
+    public void setAccessToken(String access_token) {
         this.access_token = access_token;
     }
 }

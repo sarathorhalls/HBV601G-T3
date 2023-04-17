@@ -52,7 +52,6 @@ public class CompanyFragment extends Fragment {
 
     private Button writeReviewButton;
     private Button askQuestionButton;
-    private Button requestAdminAccessButton;
 
     private View companyScrollView;
     private View companyProgressBar;
@@ -118,7 +117,7 @@ public class CompanyFragment extends Fragment {
             // Display company info
             if (company != null) {
                 // Update UI with new company
-                getActivity().runOnUiThread(this::updateCompanyUI);
+                requireActivity().runOnUiThread(this::updateCompanyUI);
             }
         }).start();
     }
@@ -143,7 +142,7 @@ public class CompanyFragment extends Fragment {
             company.setQuestions(questions);
 
             // When done
-            getActivity().runOnUiThread(() -> {
+            requireActivity().runOnUiThread(() -> {
                 // Update UI with new company
                 updateCompanyUI();
                 // Mark reviews and questions as loaded to prevent reloading on reenter
@@ -197,7 +196,7 @@ public class CompanyFragment extends Fragment {
         Review review = new Review(
                 company,
                 user,
-                (double) starRating,
+                starRating,
                 reviewText
         );
         new Thread(() -> {
@@ -209,7 +208,7 @@ public class CompanyFragment extends Fragment {
             List<Review> reviews = company.getReviews();
             reviews.add(review);
             // Update UI
-            getActivity().runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
+            requireActivity().runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
         }).start();
     }
 
@@ -234,7 +233,7 @@ public class CompanyFragment extends Fragment {
             List<Question> questions = company.getQuestions();
             questions.add(question);
             // Update UI
-            getActivity().runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
+            requireActivity().runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
         }).start();
     }
 
@@ -285,20 +284,20 @@ public class CompanyFragment extends Fragment {
         companyService = new CompanyServiceImplementation();
 
         // Get components
-        companyNameText = (TextView) view.findViewById(R.id.companyNameText);
-        companyDescriptionText = (TextView) view.findViewById(R.id.companyDescriptionText);
-        companyOpeningHoursText = (TextView) view.findViewById(R.id.companyOpeningHoursText);
-        noReviewsText = (TextView) view.findViewById(R.id.noReviewsText);
-        noQuestionsText = (TextView) view.findViewById(R.id.noQuestionsText);
+        companyNameText = view.findViewById(R.id.companyNameText);
+        companyDescriptionText = view.findViewById(R.id.companyDescriptionText);
+        companyOpeningHoursText = view.findViewById(R.id.companyOpeningHoursText);
+        noReviewsText = view.findViewById(R.id.noReviewsText);
+        noQuestionsText = view.findViewById(R.id.noQuestionsText);
 
-        companyWebsiteChip = (Chip) view.findViewById(R.id.companyWebsiteChip);
-        companyPhoneChip = (Chip) view.findViewById(R.id.companyPhoneChip);
-        companyAddressChip = (Chip) view.findViewById(R.id.companyAddressChip);
+        companyWebsiteChip = view.findViewById(R.id.companyWebsiteChip);
+        companyPhoneChip = view.findViewById(R.id.companyPhoneChip);
+        companyAddressChip = view.findViewById(R.id.companyAddressChip);
 
-        companyRatingBar = (RatingBar) view.findViewById(R.id.companyRatingBar);
+        companyRatingBar = view.findViewById(R.id.companyRatingBar);
 
-        reviewsRecycler = (RecyclerView) view.findViewById(R.id.reviewsRecycler);
-        questionsRecycler = (RecyclerView) view.findViewById(R.id.questionsRecycler);
+        reviewsRecycler = view.findViewById(R.id.reviewsRecycler);
+        questionsRecycler = view.findViewById(R.id.questionsRecycler);
 
         companyScrollView = view.findViewById(R.id.companyScrollView);
         companyProgressBar = view.findViewById(R.id.companyProgressBar);
@@ -308,16 +307,16 @@ public class CompanyFragment extends Fragment {
         questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
 
         // Write review dialog
-        writeReviewButton = (Button) view.findViewById(R.id.writeReviewButton);
+        writeReviewButton = view.findViewById(R.id.writeReviewButton);
         writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
 
         // Ask question dialog
-        askQuestionButton = (Button) view.findViewById(R.id.askQuestionButton);
+        askQuestionButton = view.findViewById(R.id.askQuestionButton);
         askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
 
         // Request admin access button
         // TODO: give this a function
-        requestAdminAccessButton = (Button) view.findViewById(R.id.requestAdminAccessButton);
+        Button requestAdminAccessButton = view.findViewById(R.id.requestAdminAccessButton);
 
         // Update button enabled states based on login status
         updateButtonStates();

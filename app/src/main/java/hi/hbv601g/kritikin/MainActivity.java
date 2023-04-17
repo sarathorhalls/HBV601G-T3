@@ -9,8 +9,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import hi.hbv601g.kritikin.entities.User;
@@ -24,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public void updateLoginState() {
         // Get menu UI items
-        MenuItem loginAction = (MenuItem) actionBar.getMenu().findItem(R.id.loginAction);
-        MenuItem logoutAction = (MenuItem) actionBar.getMenu().findItem(R.id.logoutAction);
+        MenuItem loginAction = actionBar.getMenu().findItem(R.id.loginAction);
+        MenuItem logoutAction = actionBar.getMenu().findItem(R.id.logoutAction);
 
         User user = app.getLoggedInUser();
         if (user == null) {
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Set up action bar
-        actionBar = (Toolbar) findViewById(R.id.actionBar);
+        actionBar = findViewById(R.id.actionBar);
         setSupportActionBar(actionBar);
 
         // Get the main class instance for getting login info
