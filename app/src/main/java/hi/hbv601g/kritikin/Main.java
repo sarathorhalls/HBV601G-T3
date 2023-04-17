@@ -2,9 +2,7 @@ package hi.hbv601g.kritikin;
 
 import android.app.Application;
 
-import androidx.datastore.core.DataStore;
 import androidx.datastore.preferences.core.MutablePreferences;
-import androidx.datastore.preferences.core.PreferenceDataStore;
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.PreferencesKeys;
 import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder;
@@ -13,7 +11,6 @@ import androidx.datastore.rxjava2.RxDataStore;
 import com.auth0.android.jwt.JWT;
 
 import hi.hbv601g.kritikin.entities.User;
-import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 public class Main extends Application {
@@ -70,7 +67,7 @@ public class Main extends Application {
             } else {
                 // Else, update the info with the user's details
                 mutablePreferences.set(USERNAME_KEY, loggedInUser.getUsername());
-                mutablePreferences.set(AUTH_TOKEN_KEY, loggedInUser.getAccess_token());
+                mutablePreferences.set(AUTH_TOKEN_KEY, loggedInUser.getAccessToken());
             }
             return Single.just(mutablePreferences);
         });

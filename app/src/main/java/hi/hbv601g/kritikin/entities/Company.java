@@ -16,9 +16,7 @@ public class Company implements Serializable {
     private List<Review> reviews;
     private List<Question> questions;
 
-    public Company() {
-
-    }
+    public Company() {}
 
     public Company(long id, String name, double starRating, String website, int phoneNumber,
                    String description, String address, String openingHours, List<Review> reviews,

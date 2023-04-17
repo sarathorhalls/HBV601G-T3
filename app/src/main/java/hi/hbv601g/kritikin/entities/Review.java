@@ -10,9 +10,7 @@ public class Review implements Serializable {
     private String reviewText;
     private String username;
 
-    public Review() {
-
-    }
+    public Review() {}
 
     public Review(long id, Company company, User user, double starRating, String reviewText, String username) {
         this.id = id;

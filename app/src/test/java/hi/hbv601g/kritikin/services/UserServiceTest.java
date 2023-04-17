@@ -31,6 +31,6 @@ public class UserServiceTest {
 
         assertNotNull("user null", testUser);
         assertEquals("username doesn't match", "test", testUser.getUsername());
-        assertNotEquals("access_token empty", "", testUser.getAccess_token());
+        assertNotEquals("access_token empty", "", testUser.getAccessToken());
     }
 }

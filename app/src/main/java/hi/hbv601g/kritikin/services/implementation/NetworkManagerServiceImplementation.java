@@ -74,13 +74,13 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
 
     @Override
     public String doDELETE(String url, Object[] args) throws IOException {
-        //TODO: implement doDELETE
+        // TODO: implement doDELETE
         return null;
     }
 
     @Override
     public String doPATCH(String url, Object[] args) throws IOException {
-        //TODO: implement doPATCH
+        // TODO: implement doPATCH
         return null;
     }
 }

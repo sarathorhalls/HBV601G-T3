@@ -11,7 +11,6 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
-import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
 import okhttp3.Response;
@@ -25,13 +24,13 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public Company createCompany(Company company) {
-        //TODO: implement createCompany
+        // TODO: implement createCompany
         return null;
     }
 
     @Override
     public void removeCompany(Company company) {
-        //TODO: implement removeCompany
+        // TODO: implement removeCompany
     }
 
     @Override
@@ -96,18 +95,18 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public void createReview(Review review) {
-        //Putting body into Key-Value pairs
+        // Put review into body key/value pairs
         LinkedHashMap<String, String> reviewBody = new LinkedHashMap<>();
         reviewBody.put("starRating", Double.toString(review.getStarRating()));
         reviewBody.put("reviewText", review.getReviewText());
 
-        //Putting header into Key-Value pair
+        // Put access token into header key/value pair
         LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
-        authHeader.put("Authorization", "Bearer " + review.getUser().getAccess_token());
+        authHeader.put("Authorization", "Bearer " + review.getUser().getAccessToken());
 
         try {
-            //Send post request with review
-            Response response =  networkManagerService.doPOSTResponse("/company/" + review.getCompany().getId() + "/review", reviewBody, authHeader);
+            // Submit review via POST
+            Response response = networkManagerService.doPOSTResponse("/company/" + review.getCompany().getId() + "/review", reviewBody, authHeader);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,16 +114,16 @@ public class CompanyServiceImplementation implements CompanyService {
 
     @Override
     public void createQuestion(Question question) {
-        //Putting body into Key-Value pairs
+        // Put question into body key/value pair
         LinkedHashMap<String, String> reviewBody = new LinkedHashMap<>();
         reviewBody.put("questionText", question.getQuestionText());
 
-        //Putting header into Key-Value pair
+        // Put access token into header key/value pair
         LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
-        authHeader.put("Authorization", "Bearer " + question.getUser().getAccess_token());
+        authHeader.put("Authorization", "Bearer " + question.getUser().getAccessToken());
 
         try {
-            //Send post request with review
+            // Submit question via POST
             networkManagerService.doPOST("/company/" + question.getCompany().getId() + "/question", reviewBody, authHeader);
         } catch (IOException e) {
             e.printStackTrace();

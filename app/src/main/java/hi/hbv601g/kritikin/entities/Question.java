@@ -10,9 +10,7 @@ public class Question implements Serializable {
     private String answerString;
     private String username;
 
-    public Question() {
-
-    }
+    public Question() {}
 
     public Question(long id, Company company, User user, String questionText, String answerString, String username) {
         this.id = id;
