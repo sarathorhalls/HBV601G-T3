@@ -21,7 +21,6 @@ import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 public class MainFragment extends Fragment {
     private List<Company> searchResults;
     private CompanyService companyService;
-    private SearchView searchView;
     private RecyclerView searchResultRecycler;
 
     /**
@@ -33,7 +32,7 @@ public class MainFragment extends Fragment {
             // Get company list from service and store in instance variable
             searchResults = companyService.findByName(query);
             // Display search results on UI thread
-            getActivity().runOnUiThread(() -> searchResultRecycler.setAdapter(new CompanyAdapter(searchResults)));
+            requireActivity().runOnUiThread(() -> searchResultRecycler.setAdapter(new CompanyAdapter(searchResults)));
         }).start();
     }
 
@@ -51,8 +50,8 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get search view and results list
-        searchView = (SearchView) view.findViewById(R.id.searchView);
-        searchResultRecycler = (RecyclerView) view.findViewById(R.id.searchResultRecycler);
+        SearchView searchView = view.findViewById(R.id.searchView);
+        searchResultRecycler = view.findViewById(R.id.searchResultRecycler);
 
         // Set empty adapter for recycler view to work
         searchResultRecycler.setAdapter(new CompanyAdapter(new ArrayList<>()));

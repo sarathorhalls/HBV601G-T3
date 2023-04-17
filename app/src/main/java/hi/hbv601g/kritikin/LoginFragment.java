@@ -20,8 +20,6 @@ public class LoginFragment extends Fragment {
     private Main app;
     private EditText usernameInput;
     private EditText passwordInput;
-    private Button loginButton;
-    private Button signupButton;
     private UserService userService;
     private User loginResult;
 
@@ -34,13 +32,13 @@ public class LoginFragment extends Fragment {
         new Thread(() -> {
             loginResult = userService.login(username, password);
             if (loginResult == null || loginResult.getUsername() == null) {
-                getActivity().runOnUiThread(this::showLoginFailedMessage);
+                requireActivity().runOnUiThread(this::showLoginFailedMessage);
             } else {
                 app.setLoggedInUser(loginResult);
-                getActivity().runOnUiThread(() -> {
-                    ((MainActivity) getActivity()).updateLoginState();
+                requireActivity().runOnUiThread(() -> {
+                    ((MainActivity) requireActivity()).updateLoginState();
                     showLoginSuccessMessage(loginResult.getUsername());
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 });
             }
         }).start();
@@ -48,20 +46,20 @@ public class LoginFragment extends Fragment {
 
     /**
      * Creates a new user with specified credentials and logs in
-     * @param username
-     * @param password
+     * @param username Username of user
+     * @param password Password of user
      */
     private void signup(String username, String password) {
         new Thread(() -> {
            loginResult = userService.signUp(username, password);
            if (loginResult == null || loginResult.getUsername() == null) {
-               getActivity().runOnUiThread(this::showSignupFailedMessage);
+               requireActivity().runOnUiThread(this::showSignupFailedMessage);
            } else {
                app.setLoggedInUser(loginResult);
-               getActivity().runOnUiThread(() -> {
-                   ((MainActivity) getActivity()).updateLoginState();
+               requireActivity().runOnUiThread(() -> {
+                   ((MainActivity) requireActivity()).updateLoginState();
                    showLoginSuccessMessage(loginResult.getUsername());
-                   getActivity().getSupportFragmentManager().popBackStackImmediate();
+                   requireActivity().getSupportFragmentManager().popBackStackImmediate();
                });
            }
         }).start();
@@ -91,7 +89,7 @@ public class LoginFragment extends Fragment {
 
     /**
      * Displays a message indicating the login was successful
-     * @param username
+     * @param username Username of logged in user
      */
     private void showLoginSuccessMessage(String username) {
         String message = String.format(getString(R.string.login_success_text), username);
@@ -112,24 +110,20 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // Get the main class instance for saving login info
-        app = (Main) getActivity().getApplication();
+        app = (Main) requireActivity().getApplication();
 
         // Get UI elements
-        usernameInput = (EditText) view.findViewById(R.id.usernameInput);
-        passwordInput = (EditText) view.findViewById(R.id.passwordInput);
-        loginButton = (Button) view.findViewById(R.id.loginButton);
-        signupButton = (Button) view.findViewById(R.id.signupButton);
+        usernameInput = view.findViewById(R.id.usernameInput);
+        passwordInput = view.findViewById(R.id.passwordInput);
+        Button loginButton = view.findViewById(R.id.loginButton);
+        Button signupButton = view.findViewById(R.id.signupButton);
 
         // Create user service instance
         userService = new UserServiceImplementation();
 
-        loginButton.setOnClickListener(v -> {
-            login(usernameInput.getText().toString(), passwordInput.getText().toString());
-        });
+        loginButton.setOnClickListener(v -> login(usernameInput.getText().toString(), passwordInput.getText().toString()));
 
-        signupButton.setOnClickListener(v -> {
-            signup(usernameInput.getText().toString(), passwordInput.getText().toString());
-        });
+        signupButton.setOnClickListener(v -> signup(usernameInput.getText().toString(), passwordInput.getText().toString()));
 
         return view;
     }

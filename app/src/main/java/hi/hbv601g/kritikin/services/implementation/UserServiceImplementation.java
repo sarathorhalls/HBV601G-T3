@@ -10,7 +10,7 @@ import hi.hbv601g.kritikin.services.NetworkManagerService;
 import hi.hbv601g.kritikin.services.UserService;
 
 public class UserServiceImplementation implements UserService {
-    NetworkManagerService networkManagerService;
+    final NetworkManagerService networkManagerService;
 
     public UserServiceImplementation() {
         networkManagerService = new NetworkManagerServiceImplementation();

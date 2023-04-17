@@ -3,7 +3,7 @@ package hi.hbv601g.kritikin.entities;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private String accessToken;
+    private String access_token;
     private String username;
 
     public User() {}
@@ -12,9 +12,9 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public User(String username, String accessToken) {
+    public User(String username, String access_token) {
         this.username = username;
-        this.accessToken = accessToken;
+        this.access_token = access_token;
     }
 
     public String getUsername() {
@@ -26,10 +26,10 @@ public class User implements Serializable {
     }
 
     public String getAccessToken() {
-        return accessToken;
+        return access_token;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setAccessToken(String access_token) {
+        this.access_token = access_token;
     }
 }

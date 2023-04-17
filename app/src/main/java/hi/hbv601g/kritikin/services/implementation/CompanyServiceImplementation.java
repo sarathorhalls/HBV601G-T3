@@ -16,7 +16,7 @@ import hi.hbv601g.kritikin.services.NetworkManagerService;
 import okhttp3.Response;
 
 public class CompanyServiceImplementation implements CompanyService {
-    NetworkManagerService networkManagerService;
+    final NetworkManagerService networkManagerService;
 
     public CompanyServiceImplementation() {
         networkManagerService = new NetworkManagerServiceImplementation();

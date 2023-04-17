@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Question;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
-    private List<Question> localDataSet;
+    private final List<Question> localDataSet;
 
     /**
      * Provides a reference to the type of views used to display each list item
@@ -24,9 +25,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
 
         public ViewHolder(View view) {
             super(view);
-            usernameText = (TextView) view.findViewById(R.id.questionUsernameText);
-            questionText = (TextView) view.findViewById(R.id.questionText);
-            questionAnswerText = (TextView) view.findViewById(R.id.questionAnswerText);
+            usernameText = view.findViewById(R.id.questionUsernameText);
+            questionText = view.findViewById(R.id.questionText);
+            questionAnswerText = view.findViewById(R.id.questionAnswerText);
         }
 
         public TextView getUsernameTextView() {
@@ -52,6 +53,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
