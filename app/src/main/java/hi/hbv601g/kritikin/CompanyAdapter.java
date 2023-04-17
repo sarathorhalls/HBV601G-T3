@@ -1,12 +1,14 @@
 package hi.hbv601g.kritikin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -29,10 +31,11 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             context = view.getContext();
             // Define click listener for the ViewHolder's View
             view.setOnClickListener(v -> {
-                // Start the company activity to display the selected company
-                Intent companyIntent = new Intent(context, CompanyActivity.class);
-                companyIntent.putExtra("company", company);
-                context.startActivity(companyIntent);
+                Fragment companyFragment = new CompanyFragment(company);
+                FragmentTransaction transaction = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragmentContainerView, companyFragment)
+                           .addToBackStack("company")
+                           .commit();
             });
             textView = (TextView) view.findViewById(R.id.companyListItemNameText);
         }

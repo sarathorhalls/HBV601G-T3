@@ -1,15 +1,19 @@
 package hi.hbv601g.kritikin;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionInflater;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -25,12 +29,11 @@ import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.implementation.CompanyServiceImplementation;
 
-public class CompanyActivity extends AppCompatActivity
-                             implements WriteReviewDialogFragment.WriteReviewDialogListener,
-                                        AskQuestionDialogFragment.AskQuestionDialogListener {
+public class CompanyFragment extends Fragment {
     private Main app;
     private CompanyService companyService;
     private Company company;
+    private boolean reviewsAndQuestionsLoaded = false;
 
     private TextView companyNameText;
     private TextView companyDescriptionText;
@@ -51,10 +54,12 @@ public class CompanyActivity extends AppCompatActivity
     private Button askQuestionButton;
     private Button requestAdminAccessButton;
 
-
     private View companyScrollView;
     private View companyProgressBar;
 
+    public CompanyFragment(Company company) {
+        this.company = company;
+    }
 
     /**
      * Opens a URI in the appropriate application
@@ -113,7 +118,7 @@ public class CompanyActivity extends AppCompatActivity
             // Display company info
             if (company != null) {
                 // Update UI with new company
-                CompanyActivity.this.runOnUiThread(this::updateCompanyUI);
+                getActivity().runOnUiThread(this::updateCompanyUI);
             }
         }).start();
     }
@@ -138,9 +143,11 @@ public class CompanyActivity extends AppCompatActivity
             company.setQuestions(questions);
 
             // When done
-            CompanyActivity.this.runOnUiThread(() -> {
+            getActivity().runOnUiThread(() -> {
                 // Update UI with new company
                 updateCompanyUI();
+                // Mark reviews and questions as loaded to prevent reloading on reenter
+                reviewsAndQuestionsLoaded = true;
                 // Show company info
                 showCompanyInfo();
             });
@@ -168,7 +175,7 @@ public class CompanyActivity extends AppCompatActivity
      */
     private void showWriteReviewDialog() {
         DialogFragment writeReviewDialog = new WriteReviewDialogFragment();
-        writeReviewDialog.show(getSupportFragmentManager(), "review");
+        writeReviewDialog.show(getParentFragmentManager(), "review");
     }
 
     /**
@@ -176,87 +183,22 @@ public class CompanyActivity extends AppCompatActivity
      */
     private void showAskQuestionDialog() {
         DialogFragment askQuestionDialog = new AskQuestionDialogFragment();
-        askQuestionDialog.show(getSupportFragmentManager(), "question");
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        companyService = new CompanyServiceImplementation();
-
-        // Get company from extras
-        Bundle extras = getIntent().getExtras();
-        company = (Company) extras.getSerializable("company");
-
-        // Set content view
-        setContentView(R.layout.activity_company);
-
-        // Get components
-        companyNameText = (TextView) findViewById(R.id.companyNameText);
-        companyDescriptionText = (TextView) findViewById(R.id.companyDescriptionText);
-        companyOpeningHoursText = (TextView) findViewById(R.id.companyOpeningHoursText);
-        noReviewsText = (TextView) findViewById(R.id.noReviewsText);
-        noQuestionsText = (TextView) findViewById(R.id.noQuestionsText);
-
-        companyWebsiteChip = (Chip) findViewById(R.id.companyWebsiteChip);
-        companyPhoneChip = (Chip) findViewById(R.id.companyPhoneChip);
-        companyAddressChip = (Chip) findViewById(R.id.companyAddressChip);
-
-        companyRatingBar = (RatingBar) findViewById(R.id.companyRatingBar);
-
-        reviewsRecycler = (RecyclerView) findViewById(R.id.reviewsRecycler);
-        questionsRecycler = (RecyclerView) findViewById(R.id.questionsRecycler);
-
-        companyScrollView = findViewById(R.id.companyScrollView);
-        companyProgressBar = findViewById(R.id.companyProgressBar);
-
-        // Get the main class instance for getting login info
-        app = ((Main) getApplication());
-
-        // Write review dialog
-        writeReviewButton = (Button) findViewById(R.id.writeReviewButton);
-        writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
-
-        // Ask question dialog
-        askQuestionButton = (Button) findViewById(R.id.askQuestionButton);
-        askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
-
-        // If user is logged in, activate write review and ask question buttons
-        if (app.getLoggedInUser() != null) {
-            writeReviewButton.setEnabled(true);
-            askQuestionButton.setEnabled(true);
-        }
-
-        // Request admin access button
-        // TODO: give this a function
-        requestAdminAccessButton = (Button) findViewById(R.id.requestAdminAccessButton);
-
-        // Set empty adapters for recycler views to work
-        reviewsRecycler.setAdapter(new ReviewAdapter(new ArrayList<>()));
-        questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
-
-        // Get reviews and questions from API (to get usernames)
-        getReviewsAndQuestions();
+        askQuestionDialog.show(getParentFragmentManager(), "question");
     }
 
     /**
      * Submits a new review to the current company and updates the UI
-     * @param dialogView View containing review rating and text inside dialog fragment
+     * @param starRating Star rating of the new review
+     * @param reviewText Text content of the new review
      */
-    @Override
-    public void onWriteReviewDialogPositiveClick(View dialogView) {
-        // Get UI items
-        RatingBar ratingBar = (RatingBar) dialogView.findViewById(R.id.writeReviewRatingBar);
-        EditText reviewText = (EditText) dialogView.findViewById(R.id.writeReviewTextInput);
-
+    private void submitReview(float starRating, String reviewText) {
         User user = app.getLoggedInUser();
 
         Review review = new Review(
                 company,
                 user,
-                (double) ratingBar.getRating(),
-                reviewText.getText().toString()
+                (double) starRating,
+                reviewText
         );
         new Thread(() -> {
             // Create review via API
@@ -267,23 +209,21 @@ public class CompanyActivity extends AppCompatActivity
             List<Review> reviews = company.getReviews();
             reviews.add(review);
             // Update UI
-            runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
+            getActivity().runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
         }).start();
     }
 
     /**
      * Submits a new question to the current company and updates the UI
-     * @param dialogView View containing question text inside dialog fragment
+     * @param questionText Text content of question
      */
-    @Override
-    public void onAskQuestionDialogPositiveClick(View dialogView) {
-        EditText questionText = (EditText) dialogView.findViewById(R.id.askQuestionTextInput);
+    private void submitQuestion(String questionText) {
         User user = app.getLoggedInUser();
 
         Question question = new Question(
                 company,
                 user,
-                questionText.getText().toString()
+                questionText
         );
         new Thread(() -> {
             // Create question via API
@@ -294,7 +234,101 @@ public class CompanyActivity extends AppCompatActivity
             List<Question> questions = company.getQuestions();
             questions.add(question);
             // Update UI
-            runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
+            getActivity().runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
         }).start();
+    }
+
+    /**
+     * Updates the enabled states of the "write review" and "ask question" buttons
+     * in accordance with the user's authentication state
+     */
+    private void updateButtonStates() {
+        // If user is logged in, activate write review and ask question buttons
+        if (app.getLoggedInUser() == null) {
+            writeReviewButton.setEnabled(false);
+            askQuestionButton.setEnabled(false);
+        } else {
+            writeReviewButton.setEnabled(true);
+            askQuestionButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
+
+        FragmentManager fragmentManager = getParentFragmentManager();
+        // On review dialog submission
+        fragmentManager.setFragmentResultListener("newReview", this, (requestKey, bundle) -> {
+            float starRating = bundle.getFloat("starRating");
+            String reviewText = bundle.getString("reviewText");
+            submitReview(starRating, reviewText);
+        });
+        // On question dialog submission
+        fragmentManager.setFragmentResultListener("newQuestion", this, (requestKey, bundle) -> {
+            String questionText = bundle.getString("questionText");
+            submitQuestion(questionText);
+        });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_company, container, false);
+
+        // Get the main class instance for getting login info
+        app = (Main) getActivity().getApplication();
+
+        companyService = new CompanyServiceImplementation();
+
+        // Get components
+        companyNameText = (TextView) view.findViewById(R.id.companyNameText);
+        companyDescriptionText = (TextView) view.findViewById(R.id.companyDescriptionText);
+        companyOpeningHoursText = (TextView) view.findViewById(R.id.companyOpeningHoursText);
+        noReviewsText = (TextView) view.findViewById(R.id.noReviewsText);
+        noQuestionsText = (TextView) view.findViewById(R.id.noQuestionsText);
+
+        companyWebsiteChip = (Chip) view.findViewById(R.id.companyWebsiteChip);
+        companyPhoneChip = (Chip) view.findViewById(R.id.companyPhoneChip);
+        companyAddressChip = (Chip) view.findViewById(R.id.companyAddressChip);
+
+        companyRatingBar = (RatingBar) view.findViewById(R.id.companyRatingBar);
+
+        reviewsRecycler = (RecyclerView) view.findViewById(R.id.reviewsRecycler);
+        questionsRecycler = (RecyclerView) view.findViewById(R.id.questionsRecycler);
+
+        companyScrollView = view.findViewById(R.id.companyScrollView);
+        companyProgressBar = view.findViewById(R.id.companyProgressBar);
+
+        // Set empty adapters for recycler views to work
+        reviewsRecycler.setAdapter(new ReviewAdapter(new ArrayList<>()));
+        questionsRecycler.setAdapter(new QuestionAdapter(new ArrayList<>()));
+
+        // Write review dialog
+        writeReviewButton = (Button) view.findViewById(R.id.writeReviewButton);
+        writeReviewButton.setOnClickListener(v -> showWriteReviewDialog());
+
+        // Ask question dialog
+        askQuestionButton = (Button) view.findViewById(R.id.askQuestionButton);
+        askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
+
+        // Request admin access button
+        // TODO: give this a function
+        requestAdminAccessButton = (Button) view.findViewById(R.id.requestAdminAccessButton);
+
+        // Update button enabled states based on login status
+        updateButtonStates();
+
+        // Get reviews and questions from API (to get usernames)
+        if (!reviewsAndQuestionsLoaded) {
+            getReviewsAndQuestions();
+        } else {
+            updateCompanyUI();
+        }
+
+        return view;
     }
 }
