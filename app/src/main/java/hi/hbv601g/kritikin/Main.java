@@ -39,8 +39,8 @@ public class Main extends Application {
         // If authentication info is stored in DataStore
         if (username != null && auth_token != null) {
             JWT jwt = new JWT(auth_token);
-            if (!jwt.isExpired(10)) {
-                // Set user as logged in if authentication token is not expired
+            if (!jwt.isExpired(1800)) {
+                // Set user as logged in if authentication token does not expire in the next 30 minutes
                 setLoggedInUser(new User(username, auth_token));
             }
         }
@@ -63,8 +63,15 @@ public class Main extends Application {
         // Update authentication data in DataStore
         dataStore.updateDataAsync(prefsIn -> {
             MutablePreferences mutablePreferences = prefsIn.toMutablePreferences();
-            mutablePreferences.set(USERNAME_KEY, loggedInUser.getUsername());
-            mutablePreferences.set(AUTH_TOKEN_KEY, loggedInUser.getAccess_token());
+            if (loggedInUser == null) {
+                // If user is logged out, remove info from DataStore
+                mutablePreferences.remove(USERNAME_KEY);
+                mutablePreferences.remove(AUTH_TOKEN_KEY);
+            } else {
+                // Else, update the info with the user's details
+                mutablePreferences.set(USERNAME_KEY, loggedInUser.getUsername());
+                mutablePreferences.set(AUTH_TOKEN_KEY, loggedInUser.getAccess_token());
+            }
             return Single.just(mutablePreferences);
         });
     }
