@@ -103,7 +103,7 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setEnterTransition(inflater.inflateTransition(R.transition.slide_left));
+        setEnterTransition(inflater.inflateTransition(R.transition.slide_right));
     }
 
     @Override
