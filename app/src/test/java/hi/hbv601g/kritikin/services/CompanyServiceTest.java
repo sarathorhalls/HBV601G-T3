@@ -75,4 +75,9 @@ public class CompanyServiceTest {
         companyService.createQuestion(question);
         
     }
+
+    @Test
+    public void redeemAccessToCompanyId1Test() {
+        companyService.redeemControlOfCompany(1L, loggedInUser);
+    }
 }

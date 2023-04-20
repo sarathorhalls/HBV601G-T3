@@ -11,6 +11,7 @@ import java.util.List;
 import hi.hbv601g.kritikin.entities.Company;
 import hi.hbv601g.kritikin.entities.Question;
 import hi.hbv601g.kritikin.entities.Review;
+import hi.hbv601g.kritikin.entities.User;
 import hi.hbv601g.kritikin.services.CompanyService;
 import hi.hbv601g.kritikin.services.NetworkManagerService;
 import okhttp3.Response;
@@ -142,5 +143,17 @@ public class CompanyServiceImplementation implements CompanyService {
 
         Gson g = new Gson();
         return g.fromJson(jsonCompany, Company.class);
+    }
+
+    @Override
+    public void redeemControlOfCompany(Long companyId, User authorizedUser) {
+        // Put access token into header key/value pair
+        LinkedHashMap<String, String> authHeader = new LinkedHashMap<>();
+        authHeader.put("Authorization", "Bearer " + authorizedUser.getAccessToken());
+        try {
+            networkManagerService.doPOST("/companyUser/" + companyId, null, authHeader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
