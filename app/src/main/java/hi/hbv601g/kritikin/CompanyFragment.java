@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 
@@ -52,6 +53,7 @@ public class CompanyFragment extends Fragment {
 
     private Button writeReviewButton;
     private Button askQuestionButton;
+    private Button requestAdminAccessButton;
 
     private View companyScrollView;
     private View companyProgressBar;
@@ -238,6 +240,23 @@ public class CompanyFragment extends Fragment {
     }
 
     /**
+     * Requests admin control of the currently displayed company for the currently logged in user
+     */
+    private void requestAdminAccess() {
+        User user = app.getLoggedInUser();
+
+        new Thread(() -> {
+            // Request company redemption
+            companyService.redeemControlOfCompany(company.getId(), user);
+            // Show toast
+            String toastText = String.format(getString(R.string.admin_access_submitted_text), company.getName());
+            requireActivity().runOnUiThread(() ->
+                    Toast.makeText(requireActivity(), toastText, Toast.LENGTH_SHORT).show()
+            );
+        }).start();
+    }
+
+    /**
      * Updates the enabled states of the "write review" and "ask question" buttons
      * in accordance with the user's authentication state
      */
@@ -246,9 +265,11 @@ public class CompanyFragment extends Fragment {
         if (app.getLoggedInUser() == null) {
             writeReviewButton.setEnabled(false);
             askQuestionButton.setEnabled(false);
+            requestAdminAccessButton.setEnabled(false);
         } else {
             writeReviewButton.setEnabled(true);
             askQuestionButton.setEnabled(true);
+            requestAdminAccessButton.setEnabled(true);
         }
     }
 
@@ -279,7 +300,7 @@ public class CompanyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_company, container, false);
 
         // Get the main class instance for getting login info
-        app = (Main) getActivity().getApplication();
+        app = (Main) requireActivity().getApplication();
 
         companyService = new CompanyServiceImplementation();
 
@@ -315,8 +336,8 @@ public class CompanyFragment extends Fragment {
         askQuestionButton.setOnClickListener(v -> showAskQuestionDialog());
 
         // Request admin access button
-        // TODO: give this a function
-        Button requestAdminAccessButton = view.findViewById(R.id.requestAdminAccessButton);
+        requestAdminAccessButton = view.findViewById(R.id.requestAdminAccessButton);
+        requestAdminAccessButton.setOnClickListener(v -> requestAdminAccess());
 
         // Update button enabled states based on login status
         updateButtonStates();

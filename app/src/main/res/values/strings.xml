@@ -29,4 +29,5 @@
     <string name="question_text_hint">Question text</string>
     <string name="submit_button_text">Submit</string>
     <string name="cancel_button_text">Cancel</string>
+    <string name="admin_access_submitted_text">Requested admin access for company %s</string>
 </resources>
