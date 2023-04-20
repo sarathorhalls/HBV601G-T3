@@ -32,8 +32,8 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
     }
 
     @Override
-    public String doPOST(String url, LinkedHashMap<String, String> keyValuePairs) throws IOException {
-        return doPOSTResponse(url, keyValuePairs, null).body().string();
+    public String doPOST(String url, LinkedHashMap<String, String> body) throws IOException {
+        return doPOSTResponse(url, body, null).body().string();
     }
 
     @Override
@@ -43,16 +43,16 @@ public class NetworkManagerServiceImplementation implements NetworkManagerServic
     @Override
     public Response doPOSTResponse(String url, LinkedHashMap<String, String> body, LinkedHashMap<String, String> headers) throws IOException {
         Request.Builder requestBuilder = new Request.Builder().url(SERVER_URL + url);
-        if (body != null) {
-            FormBody.Builder formBuilder = new FormBody.Builder();
+        FormBody.Builder formBuilder = new FormBody.Builder();
 
+        if (body != null) {
             for (Map.Entry<String, String> keyValuePair: body.entrySet()) {
                 formBuilder.add(keyValuePair.getKey(), keyValuePair.getValue());
             }
-
-            RequestBody formBody = formBuilder.build();
-            requestBuilder.post(formBody);
         }
+        RequestBody formBody = formBuilder.build();
+        requestBuilder.post(formBody);
+
 
         if (headers != null) {
             Headers.Builder headerBuilder = new Headers.Builder();
