@@ -1,6 +1,10 @@
 # Krítíkin - Android
 
-Android client for the Krítíkin web service
+Android client for the Krítíkin web service.
+
+## Configuration
+
+By default, this app uses the deployed web service at [`https://hbv501g-t18-production.up.railway.app/api`](https://hbv501g-t18-production.up.railway.app/api). To replace it with a self-hosted instance of the [backend](https://github.com/sarathorhalls/HBV501G-T18), replace the API URL specified in `app/src/main/java/hi/hbv601g/kritikin/services/NetworkManagerService.java`.
 
 ## Building
 
