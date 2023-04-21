@@ -15,9 +15,6 @@
         android:theme="@style/Theme.Kritikin"
         tools:targetApi="31">
         <activity
-            android:name=".LoginFragment"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
