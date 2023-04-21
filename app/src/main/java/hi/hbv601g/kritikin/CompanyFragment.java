@@ -210,7 +210,10 @@ public class CompanyFragment extends Fragment {
             List<Review> reviews = company.getReviews();
             reviews.add(review);
             // Update UI
-            requireActivity().runOnUiThread(() -> reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1));
+            requireActivity().runOnUiThread(() -> {
+                reviewsRecycler.getAdapter().notifyItemInserted(reviews.size() - 1);
+                noReviewsText.setVisibility(View.GONE);
+            });
         }).start();
     }
 
@@ -235,7 +238,10 @@ public class CompanyFragment extends Fragment {
             List<Question> questions = company.getQuestions();
             questions.add(question);
             // Update UI
-            requireActivity().runOnUiThread(() -> questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1));
+            requireActivity().runOnUiThread(() -> {
+                questionsRecycler.getAdapter().notifyItemInserted(questions.size() - 1);
+                noQuestionsText.setVisibility(View.GONE);
+            });
         }).start();
     }
 
